@@ -118,7 +118,7 @@ export default function AdminDashboard() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-purple-50/40 via-slate-50 to-slate-100/80 font-sans text-slate-900 flex flex-col">
+    <div className="min-h-screen bg-slate-50 font-sans text-slate-900 flex flex-col">
       <PortalNavbar
         onOpenBackupModal={() => setIsBackupOpen(true)}
         isSheetsConnected={isSheetsConnected}
@@ -126,17 +126,17 @@ export default function AdminDashboard() {
 
       <main className="mx-auto w-full max-w-7xl flex-1 px-4 py-6 sm:px-6 space-y-6">
         {/* Admin Header */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 rounded-3xl bg-white p-5 border border-purple-200/80 shadow-sm">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 rounded-2xl bg-white p-5 border border-slate-200 shadow-xs">
           <div className="flex items-center gap-3.5">
-            <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-purple-100/80 text-purple-700 ring-2 ring-purple-500/20">
-              <LayoutDashboard className="h-7 w-7" />
+            <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-slate-100 text-slate-700 border border-slate-200">
+              <LayoutDashboard className="h-6 w-6" />
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <h1 className="text-lg font-extrabold text-slate-900">
+                <h1 className="text-lg font-bold text-slate-900">
                   แดชบอร์ดผู้ดูแลระบบ (Admin Executive Dashboard)
                 </h1>
-                <span className="rounded-full bg-purple-100 px-2.5 py-0.5 text-2xs font-extrabold text-purple-800">
+                <span className="rounded-md bg-slate-100 px-2.5 py-0.5 text-2xs font-bold text-slate-700 border border-slate-200">
                   สิทธิ์ผู้ดูแลระบบ
                 </span>
               </div>
@@ -151,15 +151,15 @@ export default function AdminDashboard() {
               type="button"
               onClick={() => fetchTasks(false)}
               disabled={isRefreshing}
-              className="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-600 hover:text-slate-900 px-3.5 py-2 rounded-xl border border-slate-200 bg-slate-50/70 hover:bg-slate-100 transition-colors cursor-pointer"
+              className="inline-flex items-center gap-1.5 text-xs font-medium text-slate-600 hover:text-slate-900 px-3 py-2 rounded-lg border border-slate-200 bg-white hover:bg-slate-50 transition-colors cursor-pointer"
             >
-              <RefreshCw className={`h-3.5 w-3.5 ${isRefreshing ? 'animate-spin text-purple-600' : ''}`} />
+              <RefreshCw className={`h-3.5 w-3.5 ${isRefreshing ? 'animate-spin text-slate-600' : ''}`} />
               <span>รีเฟรชข้อมูล</span>
             </button>
             <button
               type="button"
               onClick={handleDownloadCSV}
-              className="inline-flex items-center gap-1.5 rounded-xl border border-slate-200 bg-white px-3.5 py-2 text-xs font-bold text-slate-700 hover:bg-slate-50 shadow-xs transition-all cursor-pointer"
+              className="inline-flex items-center gap-1.5 rounded-lg border border-slate-200 bg-white px-3 py-2 text-xs font-semibold text-slate-700 hover:bg-slate-50 shadow-xs transition-colors cursor-pointer"
             >
               <Download className="h-4 w-4" />
               <span>ดาวน์โหลด CSV</span>
@@ -167,7 +167,7 @@ export default function AdminDashboard() {
             <button
               type="button"
               onClick={() => setIsBackupOpen(true)}
-              className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-purple-600 to-violet-600 px-4 py-2 text-xs font-bold text-white shadow-md shadow-purple-500/25 hover:from-purple-500 hover:to-violet-500 active:scale-95 transition-all cursor-pointer"
+              className="inline-flex items-center gap-1.5 rounded-lg bg-slate-900 hover:bg-slate-800 px-3.5 py-2 text-xs font-semibold text-white shadow-xs transition-colors cursor-pointer"
             >
               <CloudUpload className="h-4 w-4" />
               <span>สำรองข้อมูลชีต</span>
@@ -250,9 +250,9 @@ export default function AdminDashboard() {
                     </span>
                   </div>
                   {/* Progress bar */}
-                  <div className="w-full h-2.5 bg-slate-200 rounded-full overflow-hidden">
+                  <div className="w-full h-2 bg-slate-200 rounded-full overflow-hidden">
                     <div
-                      className="h-full bg-gradient-to-r from-blue-600 to-indigo-600 rounded-full transition-all duration-500"
+                      className="h-full bg-blue-600 rounded-full transition-all duration-300"
                       style={{ width: `${d.rate}%` }}
                     ></div>
                   </div>

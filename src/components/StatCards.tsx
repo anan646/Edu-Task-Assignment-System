@@ -24,8 +24,8 @@ export function StatCards({ tasks, selectedStatus, onSelectStatus }: StatCardsPr
       count: total,
       desc: 'ทุกสถานะในระบบ',
       icon: Layers,
-      accentBorder: 'from-slate-400 to-slate-600',
-      activeRing: 'ring-2 ring-slate-800 bg-slate-50/80 shadow-md',
+      accentBorder: 'bg-slate-500',
+      activeRing: 'ring-2 ring-slate-800 bg-slate-50 shadow-xs',
       iconBox: 'bg-slate-100 text-slate-700',
       badgeColor: 'bg-slate-100 text-slate-700',
     },
@@ -35,10 +35,10 @@ export function StatCards({ tasks, selectedStatus, onSelectStatus }: StatCardsPr
       count: pending,
       desc: total > 0 ? `${Math.round((pending / total) * 100)}% ของงานทั้งหมด` : '0%',
       icon: Clock,
-      accentBorder: 'from-amber-400 to-orange-500',
-      activeRing: 'ring-2 ring-amber-500 bg-amber-50/60 shadow-md',
-      iconBox: 'bg-amber-100/80 text-amber-700',
-      badgeColor: 'bg-amber-50 text-amber-700 ring-1 ring-amber-600/20',
+      accentBorder: 'bg-amber-500',
+      activeRing: 'ring-2 ring-amber-500 bg-amber-50/50 shadow-xs',
+      iconBox: 'bg-amber-100 text-amber-800',
+      badgeColor: 'bg-amber-50 text-amber-700 border border-amber-200',
     },
     {
       id: 'in_progress' as TaskStatus,
@@ -46,10 +46,10 @@ export function StatCards({ tasks, selectedStatus, onSelectStatus }: StatCardsPr
       count: inProgress,
       desc: total > 0 ? `${Math.round((inProgress / total) * 100)}% ของงานทั้งหมด` : '0%',
       icon: PlayCircle,
-      accentBorder: 'from-blue-500 to-indigo-600',
-      activeRing: 'ring-2 ring-blue-500 bg-blue-50/60 shadow-md',
-      iconBox: 'bg-blue-100/80 text-blue-700',
-      badgeColor: 'bg-blue-50 text-blue-700 ring-1 ring-blue-600/20',
+      accentBorder: 'bg-blue-600',
+      activeRing: 'ring-2 ring-blue-600 bg-blue-50/50 shadow-xs',
+      iconBox: 'bg-blue-100 text-blue-800',
+      badgeColor: 'bg-blue-50 text-blue-700 border border-blue-200',
     },
     {
       id: 'review' as TaskStatus,
@@ -57,10 +57,10 @@ export function StatCards({ tasks, selectedStatus, onSelectStatus }: StatCardsPr
       count: review,
       desc: review > 0 ? 'ต้องการการตรวจสอบ' : 'ไม่มีงานรอตรวจ',
       icon: AlertCircle,
-      accentBorder: 'from-purple-500 to-violet-600',
-      activeRing: 'ring-2 ring-purple-500 bg-purple-50/60 shadow-md',
-      iconBox: 'bg-purple-100/80 text-purple-700',
-      badgeColor: 'bg-purple-50 text-purple-700 ring-1 ring-purple-600/20',
+      accentBorder: 'bg-purple-600',
+      activeRing: 'ring-2 ring-purple-600 bg-purple-50/50 shadow-xs',
+      iconBox: 'bg-purple-100 text-purple-800',
+      badgeColor: 'bg-purple-50 text-purple-700 border border-purple-200',
     },
     {
       id: 'completed' as TaskStatus,
@@ -68,10 +68,10 @@ export function StatCards({ tasks, selectedStatus, onSelectStatus }: StatCardsPr
       count: completed,
       desc: total > 0 ? `${Math.round((completed / total) * 100)}% สำเร็จแล้ว` : '0%',
       icon: CheckCircle2,
-      accentBorder: 'from-emerald-400 to-teal-600',
-      activeRing: 'ring-2 ring-emerald-500 bg-emerald-50/60 shadow-md',
-      iconBox: 'bg-emerald-100/80 text-emerald-700',
-      badgeColor: 'bg-emerald-50 text-emerald-700 ring-1 ring-emerald-600/20',
+      accentBorder: 'bg-emerald-600',
+      activeRing: 'ring-2 ring-emerald-600 bg-emerald-50/50 shadow-xs',
+      iconBox: 'bg-emerald-100 text-emerald-800',
+      badgeColor: 'bg-emerald-50 text-emerald-700 border border-emerald-200',
     },
   ];
 
@@ -90,8 +90,8 @@ export function StatCards({ tasks, selectedStatus, onSelectStatus }: StatCardsPr
               isActive ? card.activeRing : 'hover:border-slate-300'
             }`}
           >
-            {/* Top gradient accent line */}
-            <div className={`absolute inset-x-0 top-0 h-1 bg-gradient-to-r ${card.accentBorder}`} />
+            {/* Top accent line */}
+            <div className={`absolute inset-x-0 top-0 h-1 ${card.accentBorder}`} />
 
             <div className="flex items-center justify-between">
               <span className="text-xs font-semibold text-slate-500 group-hover:text-slate-800 transition-colors">

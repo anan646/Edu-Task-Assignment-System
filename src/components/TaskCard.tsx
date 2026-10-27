@@ -123,7 +123,7 @@ export function TaskCard({
 
           {/* Assignee */}
           <div className="flex items-center gap-1.5 text-slate-600" title={`มอบหมายโดย: ${task.assignedBy}`}>
-            <div className="flex h-5 w-5 items-center justify-center rounded-full bg-gradient-to-tr from-slate-200 to-slate-300 text-2xs font-bold text-slate-700">
+            <div className="flex h-5 w-5 items-center justify-center rounded-full bg-slate-200 text-2xs font-semibold text-slate-700">
               {task.assignedTo ? task.assignedTo.charAt(0) : 'U'}
             </div>
             <span className="truncate max-w-[110px] text-2xs font-medium">
@@ -187,7 +187,7 @@ export function TaskCard({
                   <button
                     type="button"
                     onClick={() => onUpdateStatus(task.id, 'completed')}
-                    className="inline-flex flex-1 items-center justify-center gap-1 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 px-2.5 py-1.5 text-xs font-bold text-white hover:from-emerald-500 hover:to-teal-500 shadow-sm active:scale-95 transition-all cursor-pointer"
+                    className="inline-flex flex-1 items-center justify-center gap-1 rounded-lg bg-emerald-600 hover:bg-emerald-700 px-2.5 py-1.5 text-xs font-semibold text-white shadow-xs active:scale-95 transition-all cursor-pointer"
                   >
                     <CheckCircle2 className="h-3.5 w-3.5" />
                     <span>อนุมัติ</span>

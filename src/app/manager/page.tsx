@@ -140,7 +140,7 @@ export default function ManagerPortal() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-blue-50/40 via-slate-50 to-slate-100/80 font-sans text-slate-900 flex flex-col">
+    <div className="min-h-screen bg-slate-50 font-sans text-slate-900 flex flex-col">
       <PortalNavbar
         onOpenNewTaskModal={() => setIsNewTaskOpen(true)}
         onOpenBackupModal={() => setIsBackupOpen(true)}
@@ -149,17 +149,17 @@ export default function ManagerPortal() {
 
       <main className="mx-auto w-full max-w-7xl flex-1 px-4 py-6 sm:px-6 space-y-6">
         {/* Banner */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 rounded-3xl bg-white p-5 border border-blue-200/80 shadow-sm">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 rounded-2xl bg-white p-5 border border-slate-200 shadow-xs">
           <div className="flex items-center gap-3.5">
-            <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-blue-100/80 text-blue-700 ring-2 ring-blue-500/20">
-              <ShieldCheck className="h-7 w-7" />
+            <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-blue-50 text-blue-700 border border-blue-100">
+              <ShieldCheck className="h-6 w-6" />
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <h1 className="text-lg font-extrabold text-slate-900">
+                <h1 className="text-lg font-bold text-slate-900">
                   พอร์ทัลหัวหน้าฝ่าย / ผู้บริหาร (Manager Portal)
                 </h1>
-                <span className="rounded-full bg-blue-100 px-2.5 py-0.5 text-2xs font-extrabold text-blue-800">
+                <span className="rounded-md bg-blue-50 px-2.5 py-0.5 text-2xs font-bold text-blue-700 border border-blue-200/60">
                   สิทธิ์ผู้สั่งการ
                 </span>
               </div>
@@ -174,17 +174,17 @@ export default function ManagerPortal() {
               type="button"
               onClick={() => fetchTasks(false)}
               disabled={isRefreshing}
-              className="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-600 hover:text-slate-900 px-3.5 py-2 rounded-xl border border-slate-200 bg-slate-50/70 hover:bg-slate-100 transition-colors cursor-pointer"
+              className="inline-flex items-center gap-1.5 text-xs font-medium text-slate-600 hover:text-slate-900 px-3 py-2 rounded-lg border border-slate-200 bg-white hover:bg-slate-50 transition-colors cursor-pointer"
             >
-              <RefreshCw className={`h-3.5 w-3.5 ${isRefreshing ? 'animate-spin text-blue-600' : ''}`} />
+              <RefreshCw className={`h-3.5 w-3.5 ${isRefreshing ? 'animate-spin text-slate-600' : ''}`} />
               <span>รีเฟรช</span>
             </button>
             <button
               type="button"
               onClick={() => setIsNewTaskOpen(true)}
-              className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 px-4 py-2 text-xs font-bold text-white shadow-md shadow-blue-500/25 hover:from-blue-500 hover:to-indigo-500 active:scale-95 transition-all cursor-pointer"
+              className="inline-flex items-center gap-1.5 rounded-lg bg-blue-700 hover:bg-blue-800 px-3.5 py-2 text-xs font-semibold text-white shadow-xs transition-colors cursor-pointer"
             >
-              <Plus className="h-4 w-4" />
+              <Plus className="h-4 w-4 stroke-[2.2]" />
               <span>สั่งงานใหม่</span>
             </button>
           </div>

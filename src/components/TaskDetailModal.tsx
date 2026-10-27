@@ -253,7 +253,7 @@ export function TaskDetailModal({
                     type="button"
                     disabled={isUpdating}
                     onClick={() => handleStatusChange('in_progress')}
-                    className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 px-4 py-2 text-xs font-bold text-white shadow-md shadow-blue-500/25 hover:from-blue-500 hover:to-indigo-500 active:scale-95 transition-all cursor-pointer"
+                    className="inline-flex items-center gap-1.5 rounded-lg bg-blue-700 hover:bg-blue-800 px-4 py-2 text-xs font-semibold text-white shadow-xs active:scale-95 transition-all cursor-pointer"
                   >
                     <PlayCircle className="h-4 w-4" />
                     <span>กดรับงานและเริ่มทำ</span>
@@ -264,7 +264,7 @@ export function TaskDetailModal({
                     type="button"
                     disabled={isUpdating}
                     onClick={() => handleStatusChange('review')}
-                    className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-purple-600 to-violet-600 px-4 py-2 text-xs font-bold text-white shadow-md shadow-purple-500/25 hover:from-purple-500 hover:to-violet-500 active:scale-95 transition-all cursor-pointer"
+                    className="inline-flex items-center gap-1.5 rounded-lg bg-slate-800 hover:bg-slate-900 px-4 py-2 text-xs font-semibold text-white shadow-xs active:scale-95 transition-all cursor-pointer"
                   >
                     <Send className="h-4 w-4" />
                     <span>ส่งให้หัวหน้าตรวจงาน</span>
@@ -282,7 +282,7 @@ export function TaskDetailModal({
                       type="button"
                       disabled={isUpdating}
                       onClick={() => handleStatusChange('in_progress')}
-                      className="inline-flex items-center gap-1.5 rounded-xl border border-amber-300 bg-amber-50 px-3.5 py-2 text-xs font-bold text-amber-800 hover:bg-amber-100 active:scale-95 transition-colors cursor-pointer"
+                      className="inline-flex items-center gap-1.5 rounded-lg border border-amber-300 bg-amber-50 px-3.5 py-2 text-xs font-semibold text-amber-800 hover:bg-amber-100 active:scale-95 transition-colors cursor-pointer"
                     >
                       <RotateCcw className="h-4 w-4" />
                       <span>ส่งกลับให้แก้ไข</span>
@@ -291,7 +291,7 @@ export function TaskDetailModal({
                       type="button"
                       disabled={isUpdating}
                       onClick={() => handleStatusChange('completed')}
-                      className="inline-flex items-center gap-1.5 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 px-4 py-2 text-xs font-bold text-white shadow-md shadow-emerald-500/25 hover:from-emerald-500 hover:to-teal-500 active:scale-95 transition-all cursor-pointer"
+                      className="inline-flex items-center gap-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-700 px-4 py-2 text-xs font-semibold text-white shadow-xs active:scale-95 transition-all cursor-pointer"
                     >
                       <CheckCircle2 className="h-4 w-4" />
                       <span>อนุมัติงาน (เสร็จสมบูรณ์)</span>
@@ -303,7 +303,7 @@ export function TaskDetailModal({
                     type="button"
                     disabled={isUpdating}
                     onClick={() => handleStatusChange('completed')}
-                    className="inline-flex items-center gap-1.5 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 px-4 py-2 text-xs font-bold text-white shadow-md shadow-emerald-500/25 hover:from-emerald-500 hover:to-teal-500 active:scale-95 transition-all cursor-pointer"
+                    className="inline-flex items-center gap-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-700 px-4 py-2 text-xs font-semibold text-white shadow-xs active:scale-95 transition-all cursor-pointer"
                   >
                     <CheckCircle2 className="h-4 w-4" />
                     <span>บันทึกว่าเสร็จสิ้นแล้ว</span>

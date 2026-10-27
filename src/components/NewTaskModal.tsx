@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { Department, Priority, User } from '@/types';
-import { X, Send, AlertCircle, Calendar, UserCheck, Building, Sparkles } from 'lucide-react';
+import { X, Send, AlertCircle, Calendar, UserCheck, Building, ClipboardEdit } from 'lucide-react';
 
 interface NewTaskModalProps {
   isOpen: boolean;
@@ -98,8 +98,8 @@ export function NewTaskModal({
         {/* Header */}
         <div className="flex items-center justify-between border-b border-slate-100 pb-4">
           <div className="flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-gradient-to-tr from-blue-600 to-indigo-600 text-white shadow-md shadow-blue-500/25">
-              <Sparkles className="h-5 w-5" />
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-700 text-white shadow-xs">
+              <ClipboardEdit className="h-5 w-5" />
             </div>
             <div>
               <h2 id="modal-title" className="text-base font-bold text-slate-900">
@@ -271,7 +271,7 @@ export function NewTaskModal({
             <button
               type="submit"
               disabled={isSubmitting}
-              className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 px-5 py-2.5 text-xs font-bold text-white shadow-md shadow-blue-500/25 hover:from-blue-500 hover:to-indigo-500 active:scale-95 disabled:opacity-50 transition-all cursor-pointer"
+              className="inline-flex items-center gap-1.5 rounded-lg bg-blue-700 hover:bg-blue-800 px-5 py-2.5 text-xs font-semibold text-white shadow-xs disabled:opacity-50 transition-colors cursor-pointer"
             >
               <Send className="h-3.5 w-3.5" />
               <span>{isSubmitting ? 'กำลังบันทึกลงชีต...' : 'บันทึกและสั่งงาน'}</span>

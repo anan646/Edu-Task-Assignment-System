@@ -127,7 +127,7 @@ export default function StaffPortal() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-emerald-50/40 via-slate-50 to-slate-100/80 font-sans text-slate-900 flex flex-col">
+    <div className="min-h-screen bg-slate-50 font-sans text-slate-900 flex flex-col">
       <PortalNavbar
         onOpenBackupModal={() => setIsBackupOpen(true)}
         isSheetsConnected={isSheetsConnected}
@@ -135,17 +135,17 @@ export default function StaffPortal() {
 
       <main className="mx-auto w-full max-w-7xl flex-1 px-4 py-6 sm:px-6 space-y-6">
         {/* Banner */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 rounded-3xl bg-white p-5 border border-emerald-200/80 shadow-sm">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 rounded-2xl bg-white p-5 border border-slate-200 shadow-xs">
           <div className="flex items-center gap-3.5">
-            <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-emerald-100/80 text-emerald-700 ring-2 ring-emerald-500/20">
-              <UserIcon className="h-7 w-7" />
+            <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-emerald-50 text-emerald-700 border border-emerald-100">
+              <UserIcon className="h-6 w-6" />
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <h1 className="text-lg font-extrabold text-slate-900">
+                <h1 className="text-lg font-bold text-slate-900">
                   พอร์ทัลพนักงาน / ผู้ปฏิบัติงาน (Staff Workspace)
                 </h1>
-                <span className="rounded-full bg-emerald-100 px-2.5 py-0.5 text-2xs font-extrabold text-emerald-800">
+                <span className="rounded-md bg-emerald-50 px-2.5 py-0.5 text-2xs font-bold text-emerald-700 border border-emerald-200/60">
                   สิทธิ์ผู้ปฏิบัติงาน
                 </span>
               </div>
@@ -160,7 +160,7 @@ export default function StaffPortal() {
               type="button"
               onClick={() => fetchTasks(false)}
               disabled={isRefreshing}
-              className="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-600 hover:text-slate-900 px-3.5 py-2 rounded-xl border border-slate-200 bg-slate-50/70 hover:bg-slate-100 transition-colors cursor-pointer"
+              className="inline-flex items-center gap-1.5 text-xs font-medium text-slate-600 hover:text-slate-900 px-3 py-2 rounded-lg border border-slate-200 bg-white hover:bg-slate-50 transition-colors cursor-pointer"
             >
               <RefreshCw className={`h-3.5 w-3.5 ${isRefreshing ? 'animate-spin text-emerald-600' : ''}`} />
               <span>รีเฟรช</span>
@@ -176,7 +176,7 @@ export default function StaffPortal() {
         />
 
         {/* Staff User Selector Bar */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 rounded-2xl bg-white p-3.5 border border-emerald-200/80 shadow-2xs">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 rounded-xl bg-white p-3.5 border border-slate-200 shadow-xs">
           <div className="flex items-center gap-2.5">
             <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-emerald-50 text-emerald-700">
               <UserCheck className="h-4 w-4" />
