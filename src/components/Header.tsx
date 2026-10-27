@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { Plus, Sheet, Database, HelpCircle, CheckCircle2, AlertTriangle, ShieldCheck, User as UserIcon } from 'lucide-react';
+import { Plus, Sheet, HelpCircle, CheckCircle2, AlertTriangle, ShieldCheck, User as UserIcon, CloudUpload } from 'lucide-react';
 import { UserRole } from '@/types';
 
 interface HeaderProps {
@@ -9,6 +9,7 @@ interface HeaderProps {
   onRoleChange: (role: UserRole) => void;
   onOpenNewTaskModal: () => void;
   onOpenGuideModal: () => void;
+  onOpenBackupModal: () => void;
   isSheetsConnected: boolean;
 }
 
@@ -17,6 +18,7 @@ export function Header({
   onRoleChange,
   onOpenNewTaskModal,
   onOpenGuideModal,
+  onOpenBackupModal,
   isSheetsConnected,
 }: HeaderProps) {
   return (
@@ -57,6 +59,17 @@ export function Header({
 
         {/* Actions & Role Switcher */}
         <div className="flex items-center gap-2 sm:gap-3">
+          {/* Backup Button */}
+          <button
+            type="button"
+            onClick={onOpenBackupModal}
+            className="inline-flex items-center gap-1.5 rounded-lg border border-emerald-200 bg-emerald-50/80 px-3 py-1.5 text-xs font-semibold text-emerald-800 shadow-xs hover:bg-emerald-100 transition-colors cursor-pointer"
+            title="สำรองข้อมูลลง Google Sheet"
+          >
+            <CloudUpload className="h-4 w-4 text-emerald-600" />
+            <span>สำรองข้อมูลชีต</span>
+          </button>
+
           {/* Setup Guide Button */}
           <button
             type="button"
@@ -64,7 +77,7 @@ export function Header({
             className="inline-flex items-center gap-1.5 rounded-lg border border-zinc-200 bg-white px-3 py-1.5 text-xs font-medium text-zinc-700 shadow-xs hover:bg-zinc-50 hover:text-zinc-900 transition-colors"
           >
             <HelpCircle className="h-4 w-4 text-zinc-500" />
-            <span className="hidden md:inline">คู่มือเชื่อมต่อ</span> Google Sheets
+            <span className="hidden md:inline">คู่มือ</span> เชื่อมต่อ
           </button>
 
           {/* Role Switcher */}

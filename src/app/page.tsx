@@ -10,7 +10,8 @@ import { TaskTable } from '@/components/TaskTable';
 import { NewTaskModal } from '@/components/NewTaskModal';
 import { TaskDetailModal } from '@/components/TaskDetailModal';
 import { GoogleSheetsSetupGuide } from '@/components/GoogleSheetsSetupGuide';
-import { Loader2, Plus, Sparkles, AlertCircle, RefreshCw } from 'lucide-react';
+import { BackupModal } from '@/components/BackupModal';
+import { Loader2, Plus, Sparkles, RefreshCw } from 'lucide-react';
 
 export default function Home() {
   const [tasks, setTasks] = useState<Task[]>([]);
@@ -31,6 +32,7 @@ export default function Home() {
   // Modal States
   const [isNewTaskOpen, setIsNewTaskOpen] = useState(false);
   const [isGuideOpen, setIsGuideOpen] = useState(false);
+  const [isBackupOpen, setIsBackupOpen] = useState(false);
   const [selectedTaskDetail, setSelectedTaskDetail] = useState<Task | null>(null);
 
   // Fetch initial tasks
@@ -172,6 +174,7 @@ export default function Home() {
         onRoleChange={setCurrentRole}
         onOpenNewTaskModal={() => setIsNewTaskOpen(true)}
         onOpenGuideModal={() => setIsGuideOpen(true)}
+        onOpenBackupModal={() => setIsBackupOpen(true)}
         isSheetsConnected={isSheetsConnected}
       />
 
@@ -184,20 +187,22 @@ export default function Home() {
               <Sparkles className="h-5 w-5 shrink-0 text-amber-600" />
               <div className="text-xs">
                 <span className="font-semibold text-amber-900">
-                  ระบบกำลังทำงานในโหมดทดลองใช้งาน (Demo Data):
+                  ระบบพร้อมสำรองข้อมูลลง Google Sheet:
                 </span>{' '}
                 <span className="text-amber-800">
-                  คุณสามารถลองกดสั่งงาน ตรวจงาน เปลี่ยนสถานะได้ทันที และสามารถต่อ Google Sheet จริงได้ทุกเมื่อ
+                  คุณสามารถกดปุ่ม <strong>&quot;สำรองข้อมูลชีต&quot;</strong> เพื่อซิงค์งานทั้งหมดลงในชีตของคุณ หรือดาวน์โหลดเป็นไฟล์ CSV ได้ทันที
                 </span>
               </div>
             </div>
-            <button
-              type="button"
-              onClick={() => setIsGuideOpen(true)}
-              className="inline-flex items-center justify-center rounded-lg bg-amber-600 px-3 py-1.5 text-xs font-semibold text-white hover:bg-amber-500 shadow-2xs shrink-0 transition-colors"
-            >
-              ดูวิธีเชื่อม Google Sheet
-            </button>
+            <div className="flex items-center gap-2">
+              <button
+                type="button"
+                onClick={() => setIsBackupOpen(true)}
+                className="inline-flex items-center justify-center rounded-lg bg-emerald-600 px-3 py-1.5 text-xs font-semibold text-white hover:bg-emerald-500 shadow-2xs shrink-0 transition-colors"
+              >
+                สำรองข้อมูลเดี๋ยวนี้
+              </button>
+            </div>
           </div>
         )}
 
@@ -333,6 +338,13 @@ export default function Home() {
         isOpen={isGuideOpen}
         onClose={() => setIsGuideOpen(false)}
         isConfigured={isSheetsConnected}
+      />
+
+      <BackupModal
+        isOpen={isBackupOpen}
+        onClose={() => setIsBackupOpen(false)}
+        tasks={tasks}
+        sheetId="1g1ynWNSsHnd6Ta9rSolO6Fx6AXVRVuItgr0taKb2HMg"
       />
 
       {/* Footer */}
