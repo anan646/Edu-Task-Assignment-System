@@ -15,6 +15,7 @@ import {
   MessageSquare,
   Clock,
   ExternalLink,
+  Trash2,
 } from 'lucide-react';
 
 interface TaskDetailModalProps {
@@ -24,6 +25,7 @@ interface TaskDetailModalProps {
   departments: Department[];
   currentRole: UserRole;
   onUpdateTask: (taskId: string, updates: Partial<Task>) => Promise<void>;
+  onDeleteTask?: (taskId: string) => Promise<void>;
 }
 
 const PRIORITY_BADGES: Record<Priority, { label: string; badge: string; dot: string }> = {
@@ -47,6 +49,7 @@ export function TaskDetailModal({
   departments,
   currentRole,
   onUpdateTask,
+  onDeleteTask,
 }: TaskDetailModalProps) {
   const [notes, setNotes] = useState(task?.notes || '');
   const [isUpdating, setIsUpdating] = useState(false);
@@ -80,6 +83,19 @@ export function TaskDetailModal({
       onClose();
     } finally {
       setIsUpdating(false);
+    }
+  };
+
+  const handleDelete = async () => {
+    if (!onDeleteTask) return;
+    if (confirm(`คุณต้องการลบงาน "${task.title}" ออกจากระบบและ Google Sheet ใช่หรือไม่?`)) {
+      try {
+        setIsUpdating(true);
+        await onDeleteTask(task.id);
+        onClose();
+      } finally {
+        setIsUpdating(false);
+      }
     }
   };
 
@@ -205,13 +221,28 @@ export function TaskDetailModal({
 
         {/* Action Controls Footer */}
         <div className="mt-6 flex flex-wrap items-center justify-between gap-3 border-t border-slate-100 pt-4">
-          <button
-            type="button"
-            onClick={onClose}
-            className="rounded-xl border border-slate-200 px-4 py-2 text-xs font-semibold text-slate-600 hover:bg-slate-50 transition-colors cursor-pointer"
-          >
-            ปิดหน้าต่าง
-          </button>
+          <div className="flex items-center gap-2">
+            <button
+              type="button"
+              onClick={onClose}
+              className="rounded-xl border border-slate-200 px-4 py-2 text-xs font-semibold text-slate-600 hover:bg-slate-50 transition-colors cursor-pointer"
+            >
+              ปิดหน้าต่าง
+            </button>
+
+            {currentRole === 'head' && onDeleteTask && (
+              <button
+                type="button"
+                disabled={isUpdating}
+                onClick={handleDelete}
+                className="inline-flex items-center gap-1 rounded-xl border border-rose-200 bg-rose-50 px-3 py-2 text-xs font-semibold text-rose-700 hover:bg-rose-100 active:scale-95 transition-colors cursor-pointer"
+                title="ลบงานนี้ออกจากระบบ"
+              >
+                <Trash2 className="h-3.5 w-3.5" />
+                <span>ลบงาน</span>
+              </button>
+            )}
+          </div>
 
           <div className="flex flex-wrap items-center gap-2">
             {/* Staff Action Options */}

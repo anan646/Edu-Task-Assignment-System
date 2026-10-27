@@ -126,6 +126,19 @@ export default function ManagerPortal() {
     }
   };
 
+  const handleDeleteTask = async (taskId: string) => {
+    setTasks((prev) => prev.filter((t) => t.id !== taskId));
+    try {
+      const res = await fetch(`/api/tasks/${taskId}`, {
+        method: 'DELETE',
+      });
+      const data = await res.json();
+      if (!data.success) fetchTasks(false);
+    } catch (err) {
+      fetchTasks(false);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-blue-50/40 via-slate-50 to-slate-100/80 font-sans text-slate-900 flex flex-col">
       <PortalNavbar
@@ -253,6 +266,7 @@ export default function ManagerPortal() {
         departments={departments}
         currentRole="head"
         onUpdateTask={handleUpdateTask}
+        onDeleteTask={handleDeleteTask}
       />
 
       <BackupModal

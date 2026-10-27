@@ -31,6 +31,11 @@ export default function AdminDashboard() {
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [isBackupOpen, setIsBackupOpen] = useState(false);
 
+  // Table Filters
+  const [searchQuery, setSearchQuery] = useState('');
+  const [filterDept, setFilterDept] = useState('all');
+  const [filterStatus, setFilterStatus] = useState('all');
+
   const [today, setToday] = useState('');
   useEffect(() => {
     setToday(new Date().toISOString().split('T')[0]);
@@ -316,7 +321,7 @@ export default function AdminDashboard() {
 
         {/* All Tasks Table Overview for Admin */}
         <div className="rounded-3xl border border-slate-200/90 bg-white p-6 shadow-xs">
-          <div className="flex items-center justify-between mb-4">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
             <h2 className="font-extrabold text-sm text-slate-900 flex items-center gap-2">
               <span>📋 รายการงานทั้งหมดในระบบ ({tasks.length} งาน)</span>
             </h2>
@@ -328,6 +333,40 @@ export default function AdminDashboard() {
                 ไปที่หน้าสั่งงานหัวหน้า →
               </Link>
             </div>
+          </div>
+
+          {/* Table Filters Bar */}
+          <div className="mb-4 grid grid-cols-1 sm:grid-cols-3 gap-2.5">
+            <input
+              type="text"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              placeholder="ค้นหาชื่องาน, ผู้รับผิดชอบ หรือรหัส..."
+              className="rounded-xl border border-slate-200 bg-slate-50/70 px-3.5 py-2 text-xs text-slate-800 placeholder-slate-400 focus:border-purple-500 focus:bg-white focus:outline-hidden focus:ring-2 focus:ring-purple-500/20"
+            />
+            <select
+              value={filterDept}
+              onChange={(e) => setFilterDept(e.target.value)}
+              className="rounded-xl border border-slate-200 bg-slate-50/70 px-3 py-2 text-xs font-semibold text-slate-800 focus:border-purple-500 focus:bg-white focus:outline-hidden cursor-pointer"
+            >
+              <option value="all">ทุกฝ่ายงาน</option>
+              {departments.map((d) => (
+                <option key={d.id} value={d.id}>
+                  {d.name.split(' (')[0]}
+                </option>
+              ))}
+            </select>
+            <select
+              value={filterStatus}
+              onChange={(e) => setFilterStatus(e.target.value)}
+              className="rounded-xl border border-slate-200 bg-slate-50/70 px-3 py-2 text-xs font-semibold text-slate-800 focus:border-purple-500 focus:bg-white focus:outline-hidden cursor-pointer"
+            >
+              <option value="all">ทุกสถานะ</option>
+              <option value="pending">⏳ รอดำเนินการ</option>
+              <option value="in_progress">🔵 กำลังดำเนินการ</option>
+              <option value="review">🟣 รอหัวหน้าตรวจ</option>
+              <option value="completed">🟢 เสร็จสมบูรณ์</option>
+            </select>
           </div>
 
           <div className="overflow-x-auto">
@@ -343,20 +382,53 @@ export default function AdminDashboard() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-100">
-                {tasks.map((task) => (
-                  <tr key={task.id} className="hover:bg-slate-50/80 transition-colors">
-                    <td className="px-4 py-3 font-mono font-bold text-slate-400">{task.id}</td>
-                    <td className="px-4 py-3 font-bold text-slate-900">{task.title}</td>
-                    <td className="px-4 py-3 font-medium text-slate-700">{task.departmentId.toUpperCase()}</td>
-                    <td className="px-4 py-3 font-medium text-slate-800">{task.assignedTo}</td>
-                    <td className="px-4 py-3">{task.dueDate}</td>
-                    <td className="px-4 py-3">
-                      <span className="px-2.5 py-0.5 rounded-full text-2xs font-extrabold bg-slate-100 text-slate-700">
-                        {task.status}
-                      </span>
-                    </td>
-                  </tr>
-                ))}
+                {tasks
+                  .filter((task) => {
+                    if (filterDept !== 'all' && task.departmentId !== filterDept) return false;
+                    if (filterStatus !== 'all' && task.status !== filterStatus) return false;
+                    if (searchQuery.trim()) {
+                      const q = searchQuery.toLowerCase();
+                      const matchTitle = task.title.toLowerCase().includes(q);
+                      const matchAssignee = task.assignedTo.toLowerCase().includes(q);
+                      const matchId = task.id.toLowerCase().includes(q);
+                      if (!matchTitle && !matchAssignee && !matchId) return false;
+                    }
+                    return true;
+                  })
+                  .map((task) => {
+                    const statusBadge =
+                      task.status === 'completed'
+                        ? 'bg-emerald-50 text-emerald-700 ring-1 ring-emerald-500/20'
+                        : task.status === 'review'
+                        ? 'bg-purple-50 text-purple-700 ring-1 ring-purple-500/20'
+                        : task.status === 'in_progress'
+                        ? 'bg-blue-50 text-blue-700 ring-1 ring-blue-500/20'
+                        : 'bg-amber-50 text-amber-800 ring-1 ring-amber-500/20';
+
+                    const statusText =
+                      task.status === 'completed'
+                        ? 'เสร็จสมบูรณ์'
+                        : task.status === 'review'
+                        ? 'รอหัวหน้าตรวจ'
+                        : task.status === 'in_progress'
+                        ? 'กำลังทำ'
+                        : 'รอดำเนินการ';
+
+                    return (
+                      <tr key={task.id} className="hover:bg-slate-50/80 transition-colors">
+                        <td className="px-4 py-3 font-mono font-bold text-slate-400">{task.id}</td>
+                        <td className="px-4 py-3 font-bold text-slate-900">{task.title}</td>
+                        <td className="px-4 py-3 font-medium text-slate-700">{task.departmentId.toUpperCase()}</td>
+                        <td className="px-4 py-3 font-medium text-slate-800">{task.assignedTo}</td>
+                        <td className="px-4 py-3">{task.dueDate}</td>
+                        <td className="px-4 py-3">
+                          <span className={`px-2.5 py-0.5 rounded-full text-2xs font-extrabold ${statusBadge}`}>
+                            {statusText}
+                          </span>
+                        </td>
+                      </tr>
+                    );
+                  })}
               </tbody>
             </table>
           </div>

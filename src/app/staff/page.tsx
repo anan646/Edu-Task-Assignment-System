@@ -9,11 +9,13 @@ import { TaskBoard } from '@/components/TaskBoard';
 import { TaskTable } from '@/components/TaskTable';
 import { TaskDetailModal } from '@/components/TaskDetailModal';
 import { BackupModal } from '@/components/BackupModal';
-import { Loader2, User as UserIcon, RefreshCw, CheckCircle, Send } from 'lucide-react';
+import { Loader2, User as UserIcon, RefreshCw, CheckCircle, Send, UserCheck } from 'lucide-react';
 
 export default function StaffPortal() {
   const [tasks, setTasks] = useState<Task[]>([]);
   const [departments, setDepartments] = useState<Department[]>([]);
+  const [users, setUsers] = useState<any[]>([]);
+  const [selectedAssignee, setSelectedAssignee] = useState<string>('all');
   const [isSheetsConnected, setIsSheetsConnected] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [isRefreshing, setIsRefreshing] = useState(false);
@@ -24,7 +26,6 @@ export default function StaffPortal() {
   const [selectedPriority, setSelectedPriority] = useState<Priority | 'all'>('all');
   const [searchQuery, setSearchQuery] = useState('');
   const [viewMode, setViewMode] = useState<'board' | 'table'>('board');
-  const [onlyMyTasks, setOnlyMyTasks] = useState(false);
 
   // Modals
   const [isBackupOpen, setIsBackupOpen] = useState(false);
@@ -41,6 +42,7 @@ export default function StaffPortal() {
       if (data.success) {
         setTasks(data.tasks);
         setDepartments(data.departments);
+        setUsers(data.users || []);
         setIsSheetsConnected(Boolean(data.config?.isConfigured));
       }
     } catch (err) {
@@ -55,13 +57,24 @@ export default function StaffPortal() {
     fetchTasks();
   }, []);
 
+  // Compute unique assignees from tasks and user directory
+  const distinctAssignees = useMemo(() => {
+    const set = new Set<string>();
+    tasks.forEach((t) => {
+      if (t.assignedTo) set.add(t.assignedTo.trim());
+    });
+    users.forEach((u) => {
+      if (u.name) set.add(u.name.trim());
+    });
+    return Array.from(set).sort();
+  }, [tasks, users]);
+
   const filteredTasks = useMemo(() => {
     return tasks.filter((task) => {
       if (selectedDepartment !== 'all' && task.departmentId !== selectedDepartment) return false;
       if (selectedStatus !== 'all' && task.status !== selectedStatus) return false;
       if (selectedPriority !== 'all' && task.priority !== selectedPriority) return false;
-      if (onlyMyTasks && !task.assignedTo.includes('กิตติศักดิ์') && !task.assignedTo.includes('ธนพล') && !task.assignedTo.includes('ประเสริฐ')) {
-        // Sample match for demo staff
+      if (selectedAssignee !== 'all' && !task.assignedTo.toLowerCase().includes(selectedAssignee.toLowerCase())) {
         return false;
       }
       if (searchQuery.trim() !== '') {
@@ -74,7 +87,7 @@ export default function StaffPortal() {
       }
       return true;
     });
-  }, [tasks, selectedDepartment, selectedStatus, selectedPriority, searchQuery, onlyMyTasks]);
+  }, [tasks, selectedDepartment, selectedStatus, selectedPriority, searchQuery, selectedAssignee]);
 
   const handleUpdateStatus = async (taskId: string, newStatus: TaskStatus) => {
     setTasks((prev) =>
@@ -161,6 +174,38 @@ export default function StaffPortal() {
           selectedStatus={selectedStatus}
           onSelectStatus={setSelectedStatus}
         />
+
+        {/* Staff User Selector Bar */}
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 rounded-2xl bg-white p-3.5 border border-emerald-200/80 shadow-2xs">
+          <div className="flex items-center gap-2.5">
+            <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-emerald-50 text-emerald-700">
+              <UserCheck className="h-4 w-4" />
+            </div>
+            <div>
+              <span className="text-xs font-bold text-slate-800">
+                เลือกมุมมองพนักงาน (Assignee Filter):
+              </span>
+              <p className="text-2xs text-slate-400">เลือกชื่อของคุณเพื่อดูกล่องงานเฉพาะตัว หรือเลือกดูงานทั้งหมด</p>
+            </div>
+          </div>
+          <div className="flex items-center gap-2">
+            <select
+              value={selectedAssignee}
+              onChange={(e) => setSelectedAssignee(e.target.value)}
+              className="w-full sm:w-auto rounded-xl border border-slate-200 bg-slate-50 px-3.5 py-2 text-xs font-semibold text-slate-800 focus:border-emerald-500 focus:bg-white focus:ring-2 focus:ring-emerald-500/20 focus:outline-hidden transition-all cursor-pointer shadow-2xs"
+            >
+              <option value="all">👥 ดูงานของทุกคนในองค์กร ({tasks.length} งาน)</option>
+              {distinctAssignees.map((name) => {
+                const count = tasks.filter((t) => t.assignedTo?.toLowerCase().includes(name.toLowerCase())).length;
+                return (
+                  <option key={name} value={name}>
+                    👤 {name} ({count} งาน)
+                  </option>
+                );
+              })}
+            </select>
+          </div>
+        </div>
 
         {/* Filter Toolbar */}
         <div className="rounded-3xl border border-slate-200/90 bg-white p-4 shadow-xs">

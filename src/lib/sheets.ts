@@ -61,11 +61,18 @@ export function getConfigStatus() {
   };
 }
 
+function getWebAppUrl(): string | null {
+  const rawUrl = process.env.GOOGLE_SHEET_WEBAPP_URL;
+  if (!rawUrl) return null;
+  return rawUrl.replace(/\/a\/macros\/[^/]+\/s\//, '/macros/s/');
+}
+
 /**
  * Backup all in-memory tasks to Google Sheet via Service Account or Apps Script
  */
-export async function backupAllTasksToSheet(): Promise<{ success: boolean; message: string; count: number }> {
-  const webAppUrl = process.env.GOOGLE_SHEET_WEBAPP_URL;
+export async function backupAllTasksToSheet(customTasks?: Task[]): Promise<{ success: boolean; message: string; count: number }> {
+  const targetTasks = customTasks && customTasks.length > 0 ? customTasks : inMemoryTasks;
+  const webAppUrl = getWebAppUrl();
 
   // 1. Try Apps Script Web App if configured
   if (webAppUrl) {
@@ -75,15 +82,16 @@ export async function backupAllTasksToSheet(): Promise<{ success: boolean; messa
         headers: { 'Content-Type': 'text/plain;charset=utf-8' },
         body: JSON.stringify({
           action: 'backup',
-          tasks: inMemoryTasks,
+          tasks: targetTasks,
         }),
         redirect: 'follow',
       });
       const data = await res.json();
+      inMemoryTasks = targetTasks;
       return {
         success: true,
-        message: 'สำรองข้อมูลลง Google Sheet เรียบร้อยแล้ว (' + (data.count || inMemoryTasks.length) + ' รายการ)',
-        count: data.count || inMemoryTasks.length,
+        message: 'สำรองข้อมูลลง Google Sheet เรียบร้อยแล้ว (' + (data.count || targetTasks.length) + ' รายการ)',
+        count: data.count || targetTasks.length,
       };
     } catch (err) {
       console.error('Error backing up to Apps Script Web App:', err);
@@ -242,7 +250,7 @@ async function ensureTasksSheet(sheets: ReturnType<typeof google.sheets>, spread
  * Fetch all tasks from Google Sheets (or fallback)
  */
 export async function getTasks(): Promise<Task[]> {
-  const webAppUrl = process.env.GOOGLE_SHEET_WEBAPP_URL;
+  const webAppUrl = getWebAppUrl();
   if (webAppUrl) {
     try {
       const res = await fetch(`${webAppUrl}?action=getTasks`, { cache: 'no-store', redirect: 'follow' });
@@ -292,7 +300,11 @@ export async function getTasks(): Promise<Task[]> {
         updatedAt: row[11] || new Date().toISOString(),
       }));
 
-    return tasks.length > 0 ? tasks : inMemoryTasks;
+    if (tasks.length > 0) {
+      inMemoryTasks = tasks;
+      return tasks;
+    }
+    return inMemoryTasks;
   } catch (err) {
     console.error('Error fetching tasks from Google Sheets, using fallback:', err);
     return inMemoryTasks;
@@ -313,60 +325,65 @@ export async function createTask(task: Omit<Task, 'id' | 'createdAt' | 'updatedA
     updatedAt: now,
   };
 
-  inMemoryTasks = [newTask, ...inMemoryTasks];
+  // Ensure we have the latest list from Google Sheets before prepending
+  const existing = await getTasks();
+  inMemoryTasks = [newTask, ...existing.filter(t => t.id !== id)];
 
-  const webAppUrl = process.env.GOOGLE_SHEET_WEBAPP_URL;
+  // Sync immediately to Google Sheet via Web App
+  const webAppUrl = getWebAppUrl();
   if (webAppUrl) {
     try {
       await fetch(webAppUrl, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ action: 'createTask', task: newTask }),
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        body: JSON.stringify({
+          action: 'backup',
+          tasks: inMemoryTasks,
+        }),
+        redirect: 'follow',
       });
     } catch (err) {
-      console.error('Error creating task in Apps Script Web App:', err);
+      console.error('Error syncing new task to Apps Script Web App:', err);
     }
     return newTask;
   }
 
+  // Fallback to Service Account if configured
   const creds = getAuth();
-  if (!creds) {
-    return newTask;
+  if (creds) {
+    try {
+      const sheets = google.sheets({ version: 'v4', auth: creds.auth });
+      await ensureTasksSheet(sheets, creds.sheetId);
+
+      const row = [
+        newTask.id,
+        newTask.title,
+        newTask.description,
+        newTask.departmentId,
+        newTask.assignedTo,
+        newTask.assignedBy,
+        newTask.priority,
+        newTask.status,
+        newTask.dueDate,
+        newTask.notes || '',
+        newTask.createdAt,
+        newTask.updatedAt,
+      ];
+
+      await sheets.spreadsheets.values.append({
+        spreadsheetId: creds.sheetId,
+        range: 'Tasks!A:L',
+        valueInputOption: 'USER_ENTERED',
+        requestBody: {
+          values: [row],
+        },
+      });
+    } catch (err) {
+      console.error('Error appending task to Google Sheets via Service Account:', err);
+    }
   }
 
-  try {
-    const sheets = google.sheets({ version: 'v4', auth: creds.auth });
-    await ensureTasksSheet(sheets, creds.sheetId);
-
-    const row = [
-      newTask.id,
-      newTask.title,
-      newTask.description,
-      newTask.departmentId,
-      newTask.assignedTo,
-      newTask.assignedBy,
-      newTask.priority,
-      newTask.status,
-      newTask.dueDate,
-      newTask.notes || '',
-      newTask.createdAt,
-      newTask.updatedAt,
-    ];
-
-    await sheets.spreadsheets.values.append({
-      spreadsheetId: creds.sheetId,
-      range: 'Tasks!A:L',
-      valueInputOption: 'USER_ENTERED',
-      requestBody: {
-        values: [row],
-      },
-    });
-
-    return newTask;
-  } catch (err) {
-    console.error('Error appending task to Google Sheets:', err);
-    return newTask;
-  }
+  return newTask;
 }
 
 /**
@@ -374,92 +391,106 @@ export async function createTask(task: Omit<Task, 'id' | 'createdAt' | 'updatedA
  */
 export async function updateTask(id: string, updates: Partial<Task>): Promise<Task | null> {
   const now = new Date().toISOString();
-  const idx = inMemoryTasks.findIndex(t => t.id === id);
-  if (idx !== -1) {
-    inMemoryTasks[idx] = {
-      ...inMemoryTasks[idx],
-      ...updates,
-      updatedAt: now,
-    };
+
+  // Load latest state first
+  const currentTasks = await getTasks();
+  const idx = currentTasks.findIndex(t => t.id === id);
+
+  if (idx === -1) {
+    return null;
   }
 
-  const webAppUrl = process.env.GOOGLE_SHEET_WEBAPP_URL;
+  const updatedTask: Task = {
+    ...currentTasks[idx],
+    ...updates,
+    updatedAt: now,
+  };
+
+  currentTasks[idx] = updatedTask;
+  inMemoryTasks = currentTasks;
+
+  // Sync to Google Sheet via Web App
+  const webAppUrl = getWebAppUrl();
   if (webAppUrl) {
     try {
       await fetch(webAppUrl, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ action: 'updateTask', id, updates }),
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        body: JSON.stringify({
+          action: 'backup',
+          tasks: inMemoryTasks,
+        }),
+        redirect: 'follow',
       });
     } catch (err) {
-      console.error('Error updating task in Apps Script Web App:', err);
+      console.error('Error syncing updated task to Apps Script Web App:', err);
     }
-    return inMemoryTasks[idx] || null;
-  }
-
-  const creds = getAuth();
-  if (!creds) {
-    return inMemoryTasks[idx] || null;
-  }
-
-  try {
-    const sheets = google.sheets({ version: 'v4', auth: creds.auth });
-    const res = await sheets.spreadsheets.values.get({
-      spreadsheetId: creds.sheetId,
-      range: 'Tasks!A2:L',
-    });
-
-    const rows = res.data.values || [];
-    const rowIndex = rows.findIndex(row => row[0] === id);
-
-    if (rowIndex === -1) {
-      return inMemoryTasks[idx] || null;
-    }
-
-    const currentRow = rows[rowIndex];
-    const updatedTask: Task = {
-      id: currentRow[0],
-      title: updates.title !== undefined ? updates.title : currentRow[1],
-      description: updates.description !== undefined ? updates.description : currentRow[2],
-      departmentId: updates.departmentId !== undefined ? updates.departmentId : currentRow[3],
-      assignedTo: updates.assignedTo !== undefined ? updates.assignedTo : currentRow[4],
-      assignedBy: updates.assignedBy !== undefined ? updates.assignedBy : currentRow[5],
-      priority: (updates.priority !== undefined ? updates.priority : currentRow[6]) as Task['priority'],
-      status: (updates.status !== undefined ? updates.status : currentRow[7]) as Task['status'],
-      dueDate: updates.dueDate !== undefined ? updates.dueDate : currentRow[8],
-      notes: updates.notes !== undefined ? updates.notes : currentRow[9],
-      createdAt: currentRow[10] || now,
-      updatedAt: now,
-    };
-
-    const rowNum = rowIndex + 2;
-    await sheets.spreadsheets.values.update({
-      spreadsheetId: creds.sheetId,
-      range: `Tasks!A${rowNum}:L${rowNum}`,
-      valueInputOption: 'USER_ENTERED',
-      requestBody: {
-        values: [[
-          updatedTask.id,
-          updatedTask.title,
-          updatedTask.description,
-          updatedTask.departmentId,
-          updatedTask.assignedTo,
-          updatedTask.assignedBy,
-          updatedTask.priority,
-          updatedTask.status,
-          updatedTask.dueDate,
-          updatedTask.notes || '',
-          updatedTask.createdAt,
-          updatedTask.updatedAt,
-        ]],
-      },
-    });
-
     return updatedTask;
-  } catch (err) {
-    console.error('Error updating task in Google Sheets:', err);
-    return inMemoryTasks[idx] || null;
   }
+
+  // Fallback to Service Account if configured
+  const creds = getAuth();
+  if (creds) {
+    try {
+      const sheets = google.sheets({ version: 'v4', auth: creds.auth });
+      const rowNum = idx + 2;
+      await sheets.spreadsheets.values.update({
+        spreadsheetId: creds.sheetId,
+        range: `Tasks!A${rowNum}:L${rowNum}`,
+        valueInputOption: 'USER_ENTERED',
+        requestBody: {
+          values: [[
+            updatedTask.id,
+            updatedTask.title,
+            updatedTask.description,
+            updatedTask.departmentId,
+            updatedTask.assignedTo,
+            updatedTask.assignedBy,
+            updatedTask.priority,
+            updatedTask.status,
+            updatedTask.dueDate,
+            updatedTask.notes || '',
+            updatedTask.createdAt,
+            updatedTask.updatedAt,
+          ]],
+        },
+      });
+    } catch (err) {
+      console.error('Error updating task in Google Sheets via Service Account:', err);
+    }
+  }
+
+  return updatedTask;
+}
+
+/**
+ * Delete a task from Google Sheets
+ */
+export async function deleteTask(id: string): Promise<boolean> {
+  const currentTasks = await getTasks();
+  const exists = currentTasks.some(t => t.id === id);
+  if (!exists) return false;
+
+  inMemoryTasks = currentTasks.filter(t => t.id !== id);
+
+  const webAppUrl = getWebAppUrl();
+  if (webAppUrl) {
+    try {
+      await fetch(webAppUrl, {
+        method: 'POST',
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        body: JSON.stringify({
+          action: 'backup',
+          tasks: inMemoryTasks,
+        }),
+        redirect: 'follow',
+      });
+    } catch (err) {
+      console.error('Error syncing deleteTask to Apps Script:', err);
+    }
+  }
+
+  return true;
 }
 
 /**
