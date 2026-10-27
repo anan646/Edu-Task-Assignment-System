@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { Department, Priority, User } from '@/types';
-import { X, Send, AlertCircle, Calendar, UserCheck, Building } from 'lucide-react';
+import { X, Send, AlertCircle, Calendar, UserCheck, Building, Sparkles } from 'lucide-react';
 
 interface NewTaskModalProps {
   isOpen: boolean;
@@ -41,6 +41,7 @@ export function NewTaskModal({
     d.setDate(d.getDate() + 3);
     setDueDate(d.toISOString().split('T')[0]);
   }, []);
+
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -87,30 +88,30 @@ export function NewTaskModal({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4 backdrop-blur-xs">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 p-4 backdrop-blur-sm animate-in fade-in duration-200">
       <div
-        className="relative w-full max-w-lg rounded-2xl bg-white p-6 shadow-2xl transition-all"
+        className="relative w-full max-w-lg rounded-3xl bg-white p-6 shadow-2xl transition-all border border-slate-100"
         role="dialog"
         aria-modal="true"
         aria-labelledby="modal-title"
       >
         {/* Header */}
-        <div className="flex items-center justify-between border-b border-zinc-100 pb-4">
-          <div className="flex items-center gap-2">
-            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-blue-100 text-blue-600">
-              <Send className="h-4 w-4" />
+        <div className="flex items-center justify-between border-b border-slate-100 pb-4">
+          <div className="flex items-center gap-3">
+            <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-gradient-to-tr from-blue-600 to-indigo-600 text-white shadow-md shadow-blue-500/25">
+              <Sparkles className="h-5 w-5" />
             </div>
             <div>
-              <h2 id="modal-title" className="text-base font-bold text-zinc-900">
+              <h2 id="modal-title" className="text-base font-bold text-slate-900">
                 มอบหมายงานใหม่ (Assign Task)
               </h2>
-              <p className="text-xs text-zinc-500">สั่งงานและกำหนดฝ่าย/ผู้รับผิดชอบ</p>
+              <p className="text-xs text-slate-500 font-normal">สั่งงาน ระบุฝ่าย และกำหนดวันส่งมอบ</p>
             </div>
           </div>
           <button
             type="button"
             onClick={onClose}
-            className="rounded-lg p-1.5 text-zinc-400 hover:bg-zinc-100 hover:text-zinc-600 transition-colors"
+            className="rounded-xl p-2 text-slate-400 hover:bg-slate-100 hover:text-slate-600 transition-colors cursor-pointer"
           >
             <X className="h-5 w-5" />
           </button>
@@ -118,17 +119,17 @@ export function NewTaskModal({
 
         {/* Error Alert */}
         {error && (
-          <div className="mt-4 flex items-center gap-2 rounded-lg bg-rose-50 p-3 text-xs text-rose-700">
+          <div className="mt-4 flex items-center gap-2 rounded-xl bg-rose-50 p-3 text-xs text-rose-700 border border-rose-200">
             <AlertCircle className="h-4 w-4 shrink-0 text-rose-500" />
             <span>{error}</span>
           </div>
         )}
 
         {/* Form */}
-        <form onSubmit={handleSubmit} className="mt-4 space-y-4">
+        <form onSubmit={handleSubmit} className="mt-4 space-y-4 text-xs">
           {/* Title */}
           <div>
-            <label htmlFor="task-title" className="block text-xs font-semibold text-zinc-700">
+            <label htmlFor="task-title" className="block text-xs font-bold text-slate-700">
               ชื่องาน / วาระงาน <span className="text-rose-500">*</span>
             </label>
             <input
@@ -137,16 +138,16 @@ export function NewTaskModal({
               required
               value={title}
               onChange={(e) => setTitle(e.target.value)}
-              placeholder="เช่น ออกแบบแบนเนอร์โปรโมชัน Q4, ทำเอกสารจัดซื้อ ฯลฯ"
-              className="mt-1 w-full rounded-lg border border-zinc-200 px-3 py-2 text-sm text-zinc-900 placeholder-zinc-400 focus:border-blue-500 focus:outline-hidden focus:ring-1 focus:ring-blue-500"
+              placeholder="เช่น ออกแบบแบนเนอร์โปรโมชัน Q4, จัดทำรายงานการเงินประจำปี ฯลฯ"
+              className="mt-1.5 w-full rounded-xl border border-slate-200 bg-slate-50/50 px-3.5 py-2.5 text-xs text-slate-900 placeholder-slate-400 focus:border-blue-500 focus:bg-white focus:outline-hidden focus:ring-2 focus:ring-blue-500/20 transition-all"
             />
           </div>
 
           {/* Department Selection */}
           <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
             <div>
-              <label htmlFor="dept-select" className="block text-xs font-semibold text-zinc-700">
-                <Building className="inline h-3.5 w-3.5 mr-1 text-zinc-400" />
+              <label htmlFor="dept-select" className="block text-xs font-bold text-slate-700">
+                <Building className="inline h-3.5 w-3.5 mr-1 text-slate-400" />
                 มอบหมายให้ฝ่าย <span className="text-rose-500">*</span>
               </label>
               <select
@@ -156,7 +157,7 @@ export function NewTaskModal({
                   setDepartmentId(e.target.value);
                   setAssignedTo('');
                 }}
-                className="mt-1 w-full rounded-lg border border-zinc-200 bg-white px-3 py-2 text-sm text-zinc-900 focus:border-blue-500 focus:outline-hidden"
+                className="mt-1.5 w-full rounded-xl border border-slate-200 bg-slate-50/50 px-3 py-2.5 text-xs text-slate-900 focus:border-blue-500 focus:bg-white focus:outline-hidden focus:ring-2 focus:ring-blue-500/20 transition-all cursor-pointer"
               >
                 {departments.map((d) => (
                   <option key={d.id} value={d.id}>
@@ -168,20 +169,20 @@ export function NewTaskModal({
 
             {/* Assignee */}
             <div>
-              <label htmlFor="assignee-input" className="block text-xs font-semibold text-zinc-700">
-                <UserCheck className="inline h-3.5 w-3.5 mr-1 text-zinc-400" />
+              <label htmlFor="assignee-input" className="block text-xs font-bold text-slate-700">
+                <UserCheck className="inline h-3.5 w-3.5 mr-1 text-slate-400" />
                 ผู้รับผิดชอบ <span className="text-rose-500">*</span>
               </label>
-              <div className="mt-1 flex flex-col gap-1">
+              <div className="mt-1.5 flex flex-col gap-1">
                 <input
                   type="text"
                   id="assignee-input"
                   required
                   value={assignedTo}
                   onChange={(e) => setAssignedTo(e.target.value)}
-                  placeholder="เช่น คุณสมชาย หรือ ทั้งแผนก"
+                  placeholder="เช่น คุณกิตติศักดิ์ หรือ ทั้งแผนก"
                   list="assignee-suggestions"
-                  className="w-full rounded-lg border border-zinc-200 px-3 py-2 text-sm text-zinc-900 placeholder-zinc-400 focus:border-blue-500 focus:outline-hidden"
+                  className="w-full rounded-xl border border-slate-200 bg-slate-50/50 px-3.5 py-2.5 text-xs text-slate-900 placeholder-slate-400 focus:border-blue-500 focus:bg-white focus:outline-hidden focus:ring-2 focus:ring-blue-500/20 transition-all"
                 />
                 <datalist id="assignee-suggestions">
                   <option value={`${currentDept?.name?.split(' (')[0] || 'แผนก'} (ทั้งแผนก)`} />
@@ -196,14 +197,14 @@ export function NewTaskModal({
           {/* Priority & Due Date */}
           <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
             <div>
-              <label htmlFor="priority-select" className="block text-xs font-semibold text-zinc-700">
+              <label htmlFor="priority-select" className="block text-xs font-bold text-slate-700">
                 ระดับความสำคัญ
               </label>
               <select
                 id="priority-select"
                 value={priority}
                 onChange={(e) => setPriority(e.target.value as Priority)}
-                className="mt-1 w-full rounded-lg border border-zinc-200 bg-white px-3 py-2 text-sm text-zinc-900 focus:border-blue-500 focus:outline-hidden"
+                className="mt-1.5 w-full rounded-xl border border-slate-200 bg-slate-50/50 px-3 py-2.5 text-xs text-slate-900 focus:border-blue-500 focus:bg-white focus:outline-hidden focus:ring-2 focus:ring-blue-500/20 transition-all cursor-pointer"
               >
                 <option value="urgent">🔴 ด่วนที่สุด (Urgent)</option>
                 <option value="high">🟠 ด่วน (High)</option>
@@ -213,8 +214,8 @@ export function NewTaskModal({
             </div>
 
             <div>
-              <label htmlFor="due-date" className="block text-xs font-semibold text-zinc-700">
-                <Calendar className="inline h-3.5 w-3.5 mr-1 text-zinc-400" />
+              <label htmlFor="due-date" className="block text-xs font-bold text-slate-700">
+                <Calendar className="inline h-3.5 w-3.5 mr-1 text-slate-400" />
                 กำหนดส่ง (Deadline) <span className="text-rose-500">*</span>
               </label>
               <input
@@ -223,14 +224,14 @@ export function NewTaskModal({
                 required
                 value={dueDate}
                 onChange={(e) => setDueDate(e.target.value)}
-                className="mt-1 w-full rounded-lg border border-zinc-200 px-3 py-2 text-sm text-zinc-900 focus:border-blue-500 focus:outline-hidden"
+                className="mt-1.5 w-full rounded-xl border border-slate-200 bg-slate-50/50 px-3 py-2.5 text-xs text-slate-900 focus:border-blue-500 focus:bg-white focus:outline-hidden focus:ring-2 focus:ring-blue-500/20 transition-all cursor-pointer"
               />
             </div>
           </div>
 
           {/* Description */}
           <div>
-            <label htmlFor="task-desc" className="block text-xs font-semibold text-zinc-700">
+            <label htmlFor="task-desc" className="block text-xs font-bold text-slate-700">
               รายละเอียดงานและคำสั่งการ
             </label>
             <textarea
@@ -239,13 +240,13 @@ export function NewTaskModal({
               value={description}
               onChange={(e) => setDescription(e.target.value)}
               placeholder="ระบุข้อกำหนด วัตถุประสงค์ หรือลิงก์เอกสารอ้างอิง..."
-              className="mt-1 w-full rounded-lg border border-zinc-200 px-3 py-2 text-sm text-zinc-900 placeholder-zinc-400 focus:border-blue-500 focus:outline-hidden"
+              className="mt-1.5 w-full rounded-xl border border-slate-200 bg-slate-50/50 px-3.5 py-2.5 text-xs text-slate-900 placeholder-slate-400 focus:border-blue-500 focus:bg-white focus:outline-hidden focus:ring-2 focus:ring-blue-500/20 transition-all"
             />
           </div>
 
           {/* Supervisor Name */}
           <div>
-            <label htmlFor="supervisor-name" className="block text-xs font-medium text-zinc-500">
+            <label htmlFor="supervisor-name" className="block text-xs font-medium text-slate-500">
               ผู้สั่งการ
             </label>
             <input
@@ -253,27 +254,27 @@ export function NewTaskModal({
               id="supervisor-name"
               value={assignedBy}
               onChange={(e) => setAssignedBy(e.target.value)}
-              className="mt-1 w-full rounded-lg border border-zinc-200 bg-zinc-50 px-3 py-1.5 text-xs text-zinc-700"
+              className="mt-1.5 w-full rounded-xl border border-slate-200 bg-slate-100/70 px-3.5 py-2 text-xs text-slate-700 font-medium"
             />
           </div>
 
           {/* Submit Buttons */}
-          <div className="mt-5 flex items-center justify-end gap-2 pt-3 border-t border-zinc-100">
+          <div className="mt-6 flex items-center justify-end gap-2.5 pt-4 border-t border-slate-100">
             <button
               type="button"
               onClick={onClose}
               disabled={isSubmitting}
-              className="rounded-lg border border-zinc-200 px-4 py-2 text-xs font-medium text-zinc-700 hover:bg-zinc-50 transition-colors"
+              className="rounded-xl border border-slate-200 px-4 py-2.5 text-xs font-semibold text-slate-600 hover:bg-slate-50 transition-colors cursor-pointer"
             >
               ยกเลิก
             </button>
             <button
               type="submit"
               disabled={isSubmitting}
-              className="inline-flex items-center gap-1.5 rounded-lg bg-blue-600 px-4 py-2 text-xs font-semibold text-white hover:bg-blue-500 disabled:opacity-50 transition-colors"
+              className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 px-5 py-2.5 text-xs font-bold text-white shadow-md shadow-blue-500/25 hover:from-blue-500 hover:to-indigo-500 active:scale-95 disabled:opacity-50 transition-all cursor-pointer"
             >
               <Send className="h-3.5 w-3.5" />
-              <span>{isSubmitting ? 'กำลังบันทึกลงชีต...' : 'มอบหมายงาน'}</span>
+              <span>{isSubmitting ? 'กำลังบันทึกลงชีต...' : 'บันทึกและสั่งงาน'}</span>
             </button>
           </div>
         </form>

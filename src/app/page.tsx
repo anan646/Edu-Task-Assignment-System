@@ -11,7 +11,7 @@ import { NewTaskModal } from '@/components/NewTaskModal';
 import { TaskDetailModal } from '@/components/TaskDetailModal';
 import { GoogleSheetsSetupGuide } from '@/components/GoogleSheetsSetupGuide';
 import { BackupModal } from '@/components/BackupModal';
-import { Loader2, Plus, Sparkles, RefreshCw } from 'lucide-react';
+import { Loader2, Plus, Sparkles, RefreshCw, Sheet } from 'lucide-react';
 
 export default function Home() {
   const [tasks, setTasks] = useState<Task[]>([]);
@@ -132,7 +132,6 @@ export default function Home() {
       });
       const data = await res.json();
       if (!data.success) {
-        // Rollback on failure
         fetchTasks(false);
       }
     } catch (err) {
@@ -167,7 +166,7 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen bg-zinc-100/60 font-sans text-zinc-900 flex flex-col">
+    <div className="min-h-screen bg-gradient-to-b from-slate-50 via-slate-50/70 to-slate-100/80 font-sans text-slate-900 flex flex-col">
       {/* Top Header */}
       <Header
         currentRole={currentRole}
@@ -180,13 +179,15 @@ export default function Home() {
 
       {/* Main Container */}
       <main className="mx-auto w-full max-w-7xl flex-1 px-4 py-6 sm:px-6 space-y-6">
-        {/* Banner notification for Demo Mode */}
-        {!isSheetsConnected && !isLoading && (
-          <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between rounded-xl border border-amber-200 bg-amber-50/80 p-3.5 shadow-2xs">
-            <div className="flex items-center gap-2.5">
-              <Sparkles className="h-5 w-5 shrink-0 text-amber-600" />
+        {/* Banner notification for Demo Mode or Connected */}
+        {!isSheetsConnected && !isLoading ? (
+          <div className="flex flex-col gap-2.5 sm:flex-row sm:items-center sm:justify-between rounded-2xl border border-amber-200/90 bg-amber-50/80 p-4 shadow-xs backdrop-blur-sm">
+            <div className="flex items-center gap-3">
+              <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-amber-100 text-amber-700 shrink-0">
+                <Sparkles className="h-5 w-5" />
+              </div>
               <div className="text-xs">
-                <span className="font-semibold text-amber-900">
+                <span className="font-bold text-amber-900">
                   ระบบพร้อมสำรองข้อมูลลง Google Sheet:
                 </span>{' '}
                 <span className="text-amber-800">
@@ -194,57 +195,79 @@ export default function Home() {
                 </span>
               </div>
             </div>
-            <div className="flex items-center gap-2">
-              <button
-                type="button"
-                onClick={() => setIsBackupOpen(true)}
-                className="inline-flex items-center justify-center rounded-lg bg-emerald-600 px-3 py-1.5 text-xs font-semibold text-white hover:bg-emerald-500 shadow-2xs shrink-0 transition-colors"
-              >
-                สำรองข้อมูลเดี๋ยวนี้
-              </button>
-            </div>
+            <button
+              type="button"
+              onClick={() => setIsBackupOpen(true)}
+              className="inline-flex items-center justify-center rounded-xl bg-emerald-600 px-3.5 py-2 text-xs font-bold text-white hover:bg-emerald-500 shadow-sm shrink-0 transition-all cursor-pointer"
+            >
+              สำรองข้อมูลเดี๋ยวนี้
+            </button>
           </div>
-        )}
+        ) : isSheetsConnected && !isLoading ? (
+          <div className="flex items-center justify-between rounded-2xl border border-emerald-200/80 bg-emerald-50/60 px-4 py-2.5 text-xs text-emerald-800 shadow-2xs">
+            <div className="flex items-center gap-2">
+              <Sheet className="h-4 w-4 text-emerald-600" />
+              <span>
+                เชื่อมต่อกับ Google Sheet สำเร็จ • ระบบจะซิงค์ข้อมูลงาน <strong>{tasks.length} รายการ</strong> แบบเรียลไทม์
+              </span>
+            </div>
+            <button
+              type="button"
+              onClick={() => setIsBackupOpen(true)}
+              className="font-bold text-emerald-700 hover:text-emerald-900 underline text-2xs cursor-pointer"
+            >
+              จัดการการสำรองข้อมูล →
+            </button>
+          </div>
+        ) : null}
 
         {/* Role Information Card */}
-        <div className="flex items-center justify-between rounded-xl bg-white p-3.5 border border-zinc-200 shadow-2xs">
-          <div className="flex items-center gap-3">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 rounded-2xl bg-white p-4 border border-slate-200/90 shadow-xs">
+          <div className="flex items-center gap-3.5">
             <div
-              className={`flex h-9 w-9 items-center justify-center rounded-lg text-sm font-bold ${
+              className={`flex h-11 w-11 items-center justify-center rounded-2xl text-lg font-bold shadow-xs ${
                 currentRole === 'head'
-                  ? 'bg-blue-100 text-blue-700'
-                  : 'bg-emerald-100 text-emerald-700'
+                  ? 'bg-blue-50 text-blue-700 ring-1 ring-blue-500/20'
+                  : 'bg-emerald-50 text-emerald-700 ring-1 ring-emerald-500/20'
               }`}
             >
               {currentRole === 'head' ? '👔' : '👷'}
             </div>
             <div>
-              <div className="text-xs font-semibold text-zinc-900">
-                โหมดปัจจุบัน:{' '}
-                <span className={currentRole === 'head' ? 'text-blue-700' : 'text-emerald-700'}>
+              <div className="text-xs font-bold text-slate-900 flex items-center gap-2">
+                <span>โหมดสิทธิ์การใช้งาน:</span>
+                <span
+                  className={`px-2 py-0.5 rounded-full text-2xs font-extrabold ${
+                    currentRole === 'head'
+                      ? 'bg-blue-100 text-blue-800'
+                      : 'bg-emerald-100 text-emerald-800'
+                  }`}
+                >
                   {currentRole === 'head'
                     ? 'หัวหน้าฝ่าย / ผู้บริหาร (Manager View)'
                     : 'พนักงาน / ผู้ปฏิบัติงาน (Staff View)'}
                 </span>
               </div>
-              <p className="text-2xs text-zinc-500">
+              <p className="text-2xs text-slate-500 mt-0.5 font-normal">
                 {currentRole === 'head'
-                  ? 'คุณสามารถกดปุ่ม "สั่งงานใหม่", มอบหมายงานให้แต่ละฝ่าย, อนุมัติงาน หรือตีกลับงานที่ส่งมาได้'
-                  : 'คุณสามารถดูงานที่ได้รับมอบหมาย, กดเริ่มทำงาน, และส่งงานให้หัวหน้าตรวจพร้อมแนบลิงก์ผลงาน'}
+                  ? 'สามารถสั่งงานใหม่, มอบหมายงานข้ามฝ่าย, อนุมัติงาน หรือตีกลับงานที่ส่งมาให้แก้ไข'
+                  : 'สามารถดูงานที่ได้รับมอบหมาย, กดเริ่มทำงาน, และส่งงานให้หัวหน้าตรวจพร้อมแนบลิงก์ผลงาน'}
               </p>
             </div>
           </div>
 
-          <button
-            type="button"
-            onClick={() => fetchTasks(false)}
-            disabled={isRefreshing}
-            className="flex items-center gap-1 text-xs text-zinc-500 hover:text-zinc-800 p-1.5 rounded-md hover:bg-zinc-100 transition-colors"
-            title="รีเฟรชข้อมูลล่าสุด"
-          >
-            <RefreshCw className={`h-3.5 w-3.5 ${isRefreshing ? 'animate-spin text-blue-600' : ''}`} />
-            <span className="hidden sm:inline">รีเฟรช</span>
-          </button>
+          <div className="flex items-center gap-2 self-end sm:self-center">
+            <button
+              type="button"
+              onClick={() => fetchTasks(false)}
+              disabled={isRefreshing}
+              className="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-600 hover:text-slate-900 px-3 py-1.5 rounded-xl border border-slate-200 bg-slate-50/50 hover:bg-slate-100 transition-colors cursor-pointer"
+              title="ดึงข้อมูลล่าสุดจาก Google Sheet"
+            >
+              <RefreshCw className={`h-3.5 w-3.5 ${isRefreshing ? 'animate-spin text-blue-600' : ''}`} />
+              <span>รีเฟรชข้อมูล</span>
+            </button>
+          </div>
         </div>
 
         {/* Stats Cards */}
@@ -255,7 +278,7 @@ export default function Home() {
         />
 
         {/* Filter Toolbar */}
-        <div className="rounded-2xl border border-zinc-200 bg-white p-4 shadow-2xs">
+        <div className="rounded-2xl border border-slate-200/90 bg-white p-4 shadow-xs">
           <TaskFilters
             departments={departments}
             selectedDepartment={selectedDepartment}
@@ -273,15 +296,16 @@ export default function Home() {
 
         {/* Tasks View: Kanban Board or Table */}
         {isLoading ? (
-          <div className="flex flex-col items-center justify-center py-20 text-zinc-500 gap-3">
+          <div className="flex flex-col items-center justify-center py-24 text-slate-500 gap-3">
             <Loader2 className="h-8 w-8 animate-spin text-blue-600" />
-            <p className="text-sm font-medium">กำลังโหลดรายการงานจากระบบ...</p>
+            <p className="text-xs font-semibold">กำลังโหลดรายการงานจาก Google Sheet...</p>
           </div>
         ) : (
           <div>
-            <div className="mb-3 flex items-center justify-between text-xs text-zinc-500">
-              <span>
-                แสดงผล <strong>{filteredTasks.length}</strong> จากทั้งหมด <strong>{tasks.length}</strong> งาน
+            <div className="mb-3.5 flex items-center justify-between text-xs text-slate-500 px-1">
+              <span className="font-medium">
+                แสดงผล <strong className="text-slate-800">{filteredTasks.length}</strong> จากทั้งหมด{' '}
+                <strong className="text-slate-800">{tasks.length}</strong> งาน
               </span>
             </div>
 
@@ -310,10 +334,10 @@ export default function Home() {
       <button
         type="button"
         onClick={() => setIsNewTaskOpen(true)}
-        className="fixed bottom-6 right-6 z-40 flex h-14 w-14 items-center justify-center rounded-full bg-blue-600 text-white shadow-xl shadow-blue-500/30 hover:bg-blue-500 focus-visible:outline-hidden md:hidden"
+        className="fixed bottom-6 right-6 z-40 flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-tr from-blue-600 to-indigo-600 text-white shadow-xl shadow-blue-500/35 hover:from-blue-500 hover:to-indigo-500 active:scale-95 transition-all md:hidden cursor-pointer"
         title="สั่งงานใหม่"
       >
-        <Plus className="h-6 w-6" />
+        <Plus className="h-6 w-6 stroke-[2.5]" />
       </button>
 
       {/* Modals */}
@@ -348,8 +372,8 @@ export default function Home() {
       />
 
       {/* Footer */}
-      <footer className="mt-auto border-t border-zinc-200 bg-white py-4 text-center text-xs text-zinc-400">
-        ระบบมอบหมายงานองค์กร • ทำงานร่วมกับ Google Sheets &amp; Vercel • รองรับการสั่งงานข้ามฝ่าย
+      <footer className="mt-auto border-t border-slate-200 bg-white py-4 text-center text-xs text-slate-400 font-medium">
+        ระบบมอบหมายงานองค์กร • เชื่อมต่อ Google Sheets &amp; Vercel • ใช้งานได้ทุกอุปกรณ์
       </footer>
     </div>
   );

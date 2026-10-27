@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { Task, TaskStatus } from '@/types';
-import { Clock, PlayCircle, CheckCircle, AlertCircle, FileText } from 'lucide-react';
+import { Clock, PlayCircle, CheckCircle2, AlertCircle, Layers } from 'lucide-react';
 
 interface StatCardsProps {
   tasks: Task[];
@@ -22,51 +22,61 @@ export function StatCards({ tasks, selectedStatus, onSelectStatus }: StatCardsPr
       id: 'all',
       title: 'งานทั้งหมด',
       count: total,
-      icon: FileText,
-      color: 'border-zinc-200 text-zinc-700 bg-white hover:bg-zinc-50',
-      activeColor: 'ring-2 ring-zinc-800 bg-zinc-50',
-      iconColor: 'text-zinc-600 bg-zinc-100',
+      desc: 'ทุกสถานะในระบบ',
+      icon: Layers,
+      accentBorder: 'from-slate-400 to-slate-600',
+      activeRing: 'ring-2 ring-slate-800 bg-slate-50/80 shadow-md',
+      iconBox: 'bg-slate-100 text-slate-700',
+      badgeColor: 'bg-slate-100 text-slate-700',
     },
     {
       id: 'pending' as TaskStatus,
       title: 'รอดำเนินการ',
       count: pending,
+      desc: total > 0 ? `${Math.round((pending / total) * 100)}% ของงานทั้งหมด` : '0%',
       icon: Clock,
-      color: 'border-amber-200 text-amber-900 bg-white hover:bg-amber-50/50',
-      activeColor: 'ring-2 ring-amber-500 bg-amber-50/50',
-      iconColor: 'text-amber-600 bg-amber-100',
+      accentBorder: 'from-amber-400 to-orange-500',
+      activeRing: 'ring-2 ring-amber-500 bg-amber-50/60 shadow-md',
+      iconBox: 'bg-amber-100/80 text-amber-700',
+      badgeColor: 'bg-amber-50 text-amber-700 ring-1 ring-amber-600/20',
     },
     {
       id: 'in_progress' as TaskStatus,
-      title: 'กำลังทำ',
+      title: 'กำลังดำเนินการ',
       count: inProgress,
+      desc: total > 0 ? `${Math.round((inProgress / total) * 100)}% ของงานทั้งหมด` : '0%',
       icon: PlayCircle,
-      color: 'border-blue-200 text-blue-900 bg-white hover:bg-blue-50/50',
-      activeColor: 'ring-2 ring-blue-500 bg-blue-50/50',
-      iconColor: 'text-blue-600 bg-blue-100',
+      accentBorder: 'from-blue-500 to-indigo-600',
+      activeRing: 'ring-2 ring-blue-500 bg-blue-50/60 shadow-md',
+      iconBox: 'bg-blue-100/80 text-blue-700',
+      badgeColor: 'bg-blue-50 text-blue-700 ring-1 ring-blue-600/20',
     },
     {
       id: 'review' as TaskStatus,
       title: 'รอหัวหน้าตรวจ',
       count: review,
+      desc: review > 0 ? 'ต้องการการตรวจสอบ' : 'ไม่มีงานรอตรวจ',
       icon: AlertCircle,
-      color: 'border-purple-200 text-purple-900 bg-white hover:bg-purple-50/50',
-      activeColor: 'ring-2 ring-purple-500 bg-purple-50/50',
-      iconColor: 'text-purple-600 bg-purple-100',
+      accentBorder: 'from-purple-500 to-violet-600',
+      activeRing: 'ring-2 ring-purple-500 bg-purple-50/60 shadow-md',
+      iconBox: 'bg-purple-100/80 text-purple-700',
+      badgeColor: 'bg-purple-50 text-purple-700 ring-1 ring-purple-600/20',
     },
     {
       id: 'completed' as TaskStatus,
       title: 'เสร็จสมบูรณ์',
       count: completed,
-      icon: CheckCircle,
-      color: 'border-emerald-200 text-emerald-900 bg-white hover:bg-emerald-50/50',
-      activeColor: 'ring-2 ring-emerald-500 bg-emerald-50/50',
-      iconColor: 'text-emerald-600 bg-emerald-100',
+      desc: total > 0 ? `${Math.round((completed / total) * 100)}% สำเร็จแล้ว` : '0%',
+      icon: CheckCircle2,
+      accentBorder: 'from-emerald-400 to-teal-600',
+      activeRing: 'ring-2 ring-emerald-500 bg-emerald-50/60 shadow-md',
+      iconBox: 'bg-emerald-100/80 text-emerald-700',
+      badgeColor: 'bg-emerald-50 text-emerald-700 ring-1 ring-emerald-600/20',
     },
   ];
 
   return (
-    <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">
+    <div className="grid grid-cols-2 gap-3.5 sm:grid-cols-3 lg:grid-cols-5">
       {cards.map((card) => {
         const Icon = card.icon;
         const isActive = selectedStatus === card.id;
@@ -76,16 +86,32 @@ export function StatCards({ tasks, selectedStatus, onSelectStatus }: StatCardsPr
             key={card.id}
             type="button"
             onClick={() => onSelectStatus(card.id as TaskStatus | 'all')}
-            className={`flex items-center justify-between rounded-xl border p-3.5 text-left transition-all cursor-pointer shadow-2xs ${card.color} ${
-              isActive ? card.activeColor : ''
+            className={`group relative flex flex-col justify-between overflow-hidden rounded-2xl border border-slate-200/90 bg-white p-4 text-left shadow-xs transition-all duration-200 cursor-pointer hover:-translate-y-1 hover:shadow-md ${
+              isActive ? card.activeRing : 'hover:border-slate-300'
             }`}
           >
-            <div>
-              <p className="text-xs font-medium text-zinc-500">{card.title}</p>
-              <p className="mt-1 text-2xl font-bold tracking-tight text-zinc-900">{card.count}</p>
+            {/* Top gradient accent line */}
+            <div className={`absolute inset-x-0 top-0 h-1 bg-gradient-to-r ${card.accentBorder}`} />
+
+            <div className="flex items-center justify-between">
+              <span className="text-xs font-semibold text-slate-500 group-hover:text-slate-800 transition-colors">
+                {card.title}
+              </span>
+              <div className={`flex h-9 w-9 items-center justify-center rounded-xl transition-transform group-hover:scale-105 ${card.iconBox}`}>
+                <Icon className="h-5 w-5 stroke-[2.2]" />
+              </div>
             </div>
-            <div className={`flex h-10 w-10 items-center justify-center rounded-lg ${card.iconColor}`}>
-              <Icon className="h-5 w-5" />
+
+            <div className="mt-3">
+              <div className="flex items-baseline gap-2">
+                <span className="text-3xl font-extrabold tracking-tight text-slate-900 font-sans">
+                  {card.count}
+                </span>
+                <span className="text-xs text-slate-400 font-normal">งาน</span>
+              </div>
+              <p className="mt-1 text-2xs font-medium text-slate-500 truncate">
+                {card.desc}
+              </p>
             </div>
           </button>
         );

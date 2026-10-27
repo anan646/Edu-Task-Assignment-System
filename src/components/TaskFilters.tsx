@@ -24,8 +24,6 @@ export function TaskFilters({
   onSelectDepartment,
   selectedPriority,
   onSelectPriority,
-  selectedStatus,
-  onSelectStatus,
   searchQuery,
   onSearchChange,
   viewMode,
@@ -34,35 +32,33 @@ export function TaskFilters({
   const hasActiveFilters =
     selectedDepartment !== 'all' ||
     selectedPriority !== 'all' ||
-    selectedStatus !== 'all' ||
     searchQuery.trim() !== '';
 
   const clearFilters = () => {
     onSelectDepartment('all');
     onSelectPriority('all');
-    onSelectStatus('all');
     onSearchChange('');
   };
 
   return (
-    <div className="space-y-3">
-      {/* Search Bar & View Mode Switcher */}
+    <div className="space-y-3.5">
+      {/* Top Search Bar & View Mode Switcher */}
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         {/* Search */}
         <div className="relative flex-1">
-          <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-zinc-400" />
+          <Search className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
           <input
             type="text"
             value={searchQuery}
             onChange={(e) => onSearchChange(e.target.value)}
             placeholder="ค้นหาชื่องาน, รายละเอียด, ผู้รับผิดชอบ หรือรหัส..."
-            className="w-full rounded-lg border border-zinc-200 bg-white py-2 pl-9 pr-4 text-sm text-zinc-900 placeholder-zinc-400 focus:border-blue-500 focus:outline-hidden focus:ring-1 focus:ring-blue-500 shadow-2xs"
+            className="w-full rounded-xl border border-slate-200/90 bg-slate-50/50 py-2.5 pl-10 pr-9 text-xs text-slate-900 placeholder-slate-400 focus:border-blue-500 focus:bg-white focus:outline-hidden focus:ring-2 focus:ring-blue-500/20 shadow-xs transition-all"
           />
           {searchQuery && (
             <button
               type="button"
               onClick={() => onSearchChange('')}
-              className="absolute right-2.5 top-1/2 -translate-y-1/2 text-zinc-400 hover:text-zinc-600"
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 cursor-pointer"
             >
               <X className="h-4 w-4" />
             </button>
@@ -75,7 +71,7 @@ export function TaskFilters({
             <button
               type="button"
               onClick={clearFilters}
-              className="inline-flex items-center gap-1 rounded-lg border border-zinc-200 bg-white px-2.5 py-1.5 text-xs font-medium text-zinc-600 hover:bg-zinc-50 hover:text-zinc-900 shadow-2xs"
+              className="inline-flex items-center gap-1.5 rounded-xl border border-slate-200 bg-white px-3 py-2 text-xs font-medium text-slate-600 hover:bg-slate-50 hover:text-slate-900 shadow-xs transition-all cursor-pointer"
             >
               <X className="h-3.5 w-3.5" />
               ล้างตัวกรอง
@@ -83,49 +79,49 @@ export function TaskFilters({
           )}
 
           {/* View Toggle */}
-          <div className="flex items-center rounded-lg border border-zinc-200 bg-zinc-100 p-0.5 shadow-2xs">
+          <div className="flex items-center rounded-xl border border-slate-200/80 bg-slate-100 p-1 shadow-inner">
             <button
               type="button"
               onClick={() => onViewModeChange('board')}
-              className={`flex items-center gap-1 rounded-md px-2.5 py-1 text-xs font-medium transition-all ${
+              className={`flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-semibold transition-all cursor-pointer ${
                 viewMode === 'board'
-                  ? 'bg-white text-zinc-900 shadow-xs'
-                  : 'text-zinc-600 hover:text-zinc-900'
+                  ? 'bg-white text-slate-900 shadow-xs ring-1 ring-slate-950/5'
+                  : 'text-slate-600 hover:text-slate-900'
               }`}
             >
               <LayoutGrid className="h-3.5 w-3.5" />
-              <span className="hidden sm:inline">บอร์ด</span>
+              <span>บอร์ด</span>
             </button>
             <button
               type="button"
               onClick={() => onViewModeChange('table')}
-              className={`flex items-center gap-1 rounded-md px-2.5 py-1 text-xs font-medium transition-all ${
+              className={`flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-semibold transition-all cursor-pointer ${
                 viewMode === 'table'
-                  ? 'bg-white text-zinc-900 shadow-xs'
-                  : 'text-zinc-600 hover:text-zinc-900'
+                  ? 'bg-white text-slate-900 shadow-xs ring-1 ring-slate-950/5'
+                  : 'text-slate-600 hover:text-slate-900'
               }`}
             >
               <List className="h-3.5 w-3.5" />
-              <span className="hidden sm:inline">ตาราง</span>
+              <span>ตาราง</span>
             </button>
           </div>
         </div>
       </div>
 
       {/* Filter Row: Department Pills & Priority Selector */}
-      <div className="flex flex-wrap items-center justify-between gap-2 pt-1 border-t border-zinc-100">
+      <div className="flex flex-wrap items-center justify-between gap-3 pt-2 border-t border-slate-100">
         {/* Department Pills */}
         <div className="flex items-center gap-1.5 overflow-x-auto pb-1 max-w-full">
-          <span className="text-xs font-medium text-zinc-400 flex items-center gap-1 mr-1">
-            <Filter className="h-3 w-3" /> ฝ่าย:
+          <span className="text-xs font-semibold text-slate-400 flex items-center gap-1 mr-1 shrink-0">
+            <Filter className="h-3.5 w-3.5" /> ฝ่าย:
           </span>
           <button
             type="button"
             onClick={() => onSelectDepartment('all')}
-            className={`rounded-full px-3 py-1 text-xs font-medium transition-all shrink-0 ${
+            className={`rounded-full px-3.5 py-1 text-xs font-semibold transition-all shrink-0 cursor-pointer ${
               selectedDepartment === 'all'
-                ? 'bg-zinc-900 text-white'
-                : 'bg-zinc-100 text-zinc-600 hover:bg-zinc-200'
+                ? 'bg-slate-900 text-white shadow-xs'
+                : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
             }`}
           >
             ทุกฝ่าย
@@ -137,10 +133,10 @@ export function TaskFilters({
                 key={dept.id}
                 type="button"
                 onClick={() => onSelectDepartment(dept.id)}
-                className={`rounded-full px-3 py-1 text-xs font-medium transition-all shrink-0 ${
+                className={`rounded-full px-3 py-1 text-xs font-semibold transition-all shrink-0 cursor-pointer ${
                   isSelected
-                    ? 'bg-blue-600 text-white font-semibold shadow-xs'
-                    : 'bg-zinc-100 text-zinc-600 hover:bg-zinc-200'
+                    ? 'bg-blue-600 text-white shadow-sm ring-2 ring-blue-600/30'
+                    : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
                 }`}
               >
                 {dept.name.split(' (')[0]}
@@ -150,12 +146,12 @@ export function TaskFilters({
         </div>
 
         {/* Priority Filter */}
-        <div className="flex items-center gap-1 text-xs text-zinc-500">
-          <span className="font-medium text-zinc-400">ความเร่งด่วน:</span>
+        <div className="flex items-center gap-2 text-xs text-slate-500">
+          <span className="font-semibold text-slate-400">ความเร่งด่วน:</span>
           <select
             value={selectedPriority}
             onChange={(e) => onSelectPriority(e.target.value as Priority | 'all')}
-            className="rounded-lg border border-zinc-200 bg-white px-2 py-1 text-xs text-zinc-800 shadow-2xs focus:border-blue-500 focus:outline-hidden"
+            className="rounded-xl border border-slate-200 bg-white px-3 py-1.5 text-xs font-medium text-slate-800 shadow-xs focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 focus:outline-hidden cursor-pointer"
           >
             <option value="all">ทั้งหมด</option>
             <option value="urgent">🔴 ด่วนที่สุด</option>
