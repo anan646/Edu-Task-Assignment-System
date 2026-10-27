@@ -72,17 +72,18 @@ export async function backupAllTasksToSheet(): Promise<{ success: boolean; messa
     try {
       const res = await fetch(webAppUrl, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
         body: JSON.stringify({
           action: 'backup',
           tasks: inMemoryTasks,
         }),
+        redirect: 'follow',
       });
       const data = await res.json();
       return {
         success: true,
-        message: 'สำรองข้อมูลลง Google Sheet ผ่าน Apps Script เรียบร้อยแล้ว',
-        count: inMemoryTasks.length,
+        message: 'สำรองข้อมูลลง Google Sheet เรียบร้อยแล้ว (' + (data.count || inMemoryTasks.length) + ' รายการ)',
+        count: data.count || inMemoryTasks.length,
       };
     } catch (err) {
       console.error('Error backing up to Apps Script Web App:', err);
@@ -244,10 +245,15 @@ export async function getTasks(): Promise<Task[]> {
   const webAppUrl = process.env.GOOGLE_SHEET_WEBAPP_URL;
   if (webAppUrl) {
     try {
-      const res = await fetch(`${webAppUrl}?action=getTasks`, { cache: 'no-store' });
+      const res = await fetch(`${webAppUrl}?action=getTasks`, { cache: 'no-store', redirect: 'follow' });
       const data = await res.json();
       if (data && Array.isArray(data.tasks) && data.tasks.length > 0) {
-        return data.tasks;
+        const formattedTasks: Task[] = data.tasks.map((t: Task) => ({
+          ...t,
+          dueDate: t.dueDate ? String(t.dueDate).slice(0, 10) : '',
+        }));
+        inMemoryTasks = formattedTasks;
+        return formattedTasks;
       }
     } catch (err) {
       console.error('Error fetching from Google Apps Script Web App:', err);
