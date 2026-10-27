@@ -29,17 +29,17 @@ interface TaskDetailModalProps {
 }
 
 const PRIORITY_BADGES: Record<Priority, { label: string; badge: string; dot: string }> = {
-  urgent: { label: 'ด่วนที่สุด', badge: 'bg-rose-50 text-rose-700 ring-rose-600/25', dot: 'bg-rose-500' },
-  high: { label: 'ด่วน', badge: 'bg-amber-50 text-amber-800 ring-amber-600/25', dot: 'bg-amber-500' },
-  normal: { label: 'ปกติ', badge: 'bg-blue-50 text-blue-700 ring-blue-600/25', dot: 'bg-blue-500' },
-  low: { label: 'ทั่วไป', badge: 'bg-slate-100 text-slate-600 ring-slate-500/25', dot: 'bg-slate-400' },
+  urgent: { label: 'ด่วนที่สุด', badge: 'bg-rose-50 text-rose-700 border border-rose-200', dot: 'bg-rose-500' },
+  high: { label: 'ด่วน', badge: 'bg-amber-50 text-amber-800 border border-amber-200', dot: 'bg-amber-500' },
+  normal: { label: 'ปกติ', badge: 'bg-blue-50 text-blue-700 border border-blue-200', dot: 'bg-blue-500' },
+  low: { label: 'ทั่วไป', badge: 'bg-slate-100 text-slate-700 border border-slate-200', dot: 'bg-slate-400' },
 };
 
 const STATUS_BADGES: Record<TaskStatus, { label: string; badge: string; dot: string }> = {
-  pending: { label: 'รอดำเนินการ', badge: 'bg-amber-50 text-amber-800 ring-amber-600/25', dot: 'bg-amber-500' },
-  in_progress: { label: 'กำลังดำเนินการ', badge: 'bg-blue-50 text-blue-700 ring-blue-600/25', dot: 'bg-blue-500' },
-  review: { label: 'รอหัวหน้าตรวจ', badge: 'bg-purple-50 text-purple-700 ring-purple-600/25', dot: 'bg-purple-500' },
-  completed: { label: 'เสร็จสมบูรณ์', badge: 'bg-emerald-50 text-emerald-700 ring-emerald-600/25', dot: 'bg-emerald-500' },
+  pending: { label: 'รอดำเนินการ', badge: 'bg-amber-50 text-amber-800 border border-amber-200', dot: 'bg-amber-500' },
+  in_progress: { label: 'กำลังดำเนินการ', badge: 'bg-blue-50 text-blue-700 border border-blue-200', dot: 'bg-blue-500' },
+  review: { label: 'รอหัวหน้าตรวจ', badge: 'bg-indigo-50 text-indigo-700 border border-indigo-200', dot: 'bg-indigo-500' },
+  completed: { label: 'เสร็จสมบูรณ์', badge: 'bg-emerald-50 text-emerald-700 border border-emerald-200', dot: 'bg-emerald-500' },
 };
 
 export function TaskDetailModal({
@@ -102,7 +102,7 @@ export function TaskDetailModal({
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 p-4 backdrop-blur-sm animate-in fade-in duration-200">
       <div
-        className="relative w-full max-w-xl rounded-3xl bg-white p-6 shadow-2xl transition-all border border-slate-100 max-h-[92vh] overflow-y-auto"
+        className="relative w-full max-w-xl rounded-2xl bg-white p-6 shadow-2xl transition-all border border-slate-200 max-h-[92vh] overflow-y-auto"
         role="dialog"
         aria-modal="true"
       >
@@ -110,17 +110,17 @@ export function TaskDetailModal({
         <div className="flex items-start justify-between border-b border-slate-100 pb-4">
           <div>
             <div className="flex items-center gap-2">
-              <span className="font-mono text-xs font-bold text-slate-400 bg-slate-100 px-2 py-0.5 rounded-md">
+              <span className="font-mono text-xs font-bold text-slate-500 bg-slate-100 px-2 py-0.5 rounded-md border border-slate-200">
                 {task.id}
               </span>
               <span
-                className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-0.5 text-2xs font-semibold ring-1 ring-inset ${statusInfo.badge}`}
+                className={`inline-flex items-center gap-1.5 rounded-md px-2.5 py-0.5 text-2xs font-bold ${statusInfo.badge}`}
               >
                 <span className={`h-1.5 w-1.5 rounded-full ${statusInfo.dot}`}></span>
                 {statusInfo.label}
               </span>
               <span
-                className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-0.5 text-2xs font-semibold ring-1 ring-inset ${priorityInfo.badge}`}
+                className={`inline-flex items-center gap-1.5 rounded-md px-2.5 py-0.5 text-2xs font-bold ${priorityInfo.badge}`}
               >
                 <span className={`h-1.5 w-1.5 rounded-full ${priorityInfo.dot}`}></span>
                 {priorityInfo.label}
@@ -131,7 +131,7 @@ export function TaskDetailModal({
           <button
             type="button"
             onClick={onClose}
-            className="rounded-xl p-2 text-slate-400 hover:bg-slate-100 hover:text-slate-600 transition-colors cursor-pointer"
+            className="rounded-lg p-1.5 text-slate-400 hover:bg-slate-100 hover:text-slate-600 transition-colors cursor-pointer"
           >
             <X className="h-5 w-5" />
           </button>
@@ -225,7 +225,7 @@ export function TaskDetailModal({
             <button
               type="button"
               onClick={onClose}
-              className="rounded-xl border border-slate-200 px-4 py-2 text-xs font-semibold text-slate-600 hover:bg-slate-50 transition-colors cursor-pointer"
+              className="rounded-lg border border-slate-200 px-3.5 py-2 text-xs font-semibold text-slate-700 hover:bg-slate-50 transition-colors cursor-pointer"
             >
               ปิดหน้าต่าง
             </button>
@@ -235,7 +235,7 @@ export function TaskDetailModal({
                 type="button"
                 disabled={isUpdating}
                 onClick={handleDelete}
-                className="inline-flex items-center gap-1 rounded-xl border border-rose-200 bg-rose-50 px-3 py-2 text-xs font-semibold text-rose-700 hover:bg-rose-100 active:scale-95 transition-colors cursor-pointer"
+                className="inline-flex items-center gap-1 rounded-lg border border-rose-200 bg-rose-50 px-3 py-2 text-xs font-semibold text-rose-700 hover:bg-rose-100 transition-colors cursor-pointer"
                 title="ลบงานนี้ออกจากระบบ"
               >
                 <Trash2 className="h-3.5 w-3.5" />

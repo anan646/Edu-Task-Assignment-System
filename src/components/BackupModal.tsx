@@ -117,21 +117,21 @@ function doGet(e) {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-xs overflow-y-auto">
       <div
-        className="relative my-6 w-full max-w-2xl rounded-2xl bg-white p-6 shadow-2xl transition-all max-h-[92vh] overflow-y-auto text-xs text-zinc-700"
+        className="relative my-6 w-full max-w-2xl rounded-2xl bg-white p-6 shadow-2xl transition-all max-h-[92vh] overflow-y-auto text-xs text-slate-700"
         role="dialog"
         aria-modal="true"
       >
         {/* Header */}
-        <div className="flex items-start justify-between border-b border-zinc-100 pb-4">
+        <div className="flex items-start justify-between border-b border-slate-100 pb-4">
           <div className="flex items-center gap-3">
             <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-100 text-blue-700">
               <CloudUpload className="h-6 w-6" />
             </div>
             <div>
-              <h2 className="text-base font-bold text-zinc-900">
+              <h2 className="text-base font-bold text-slate-900">
                 ระบบสำรองข้อมูลใน Google Sheet
               </h2>
-              <p className="text-xs text-zinc-500">
+              <p className="text-xs text-slate-500">
                 บันทึกและสำรองข้อมูลงานทั้งหมด ({tasks.length} รายการ) ลงในชีต
               </p>
             </div>
@@ -139,7 +139,7 @@ function doGet(e) {
           <button
             type="button"
             onClick={onClose}
-            className="rounded-lg p-1.5 text-zinc-400 hover:bg-zinc-100 hover:text-zinc-600 transition-colors"
+            className="rounded-lg p-1.5 text-slate-400 hover:bg-slate-100 hover:text-slate-600 transition-colors cursor-pointer"
           >
             <X className="h-5 w-5" />
           </button>
@@ -191,13 +191,13 @@ function doGet(e) {
           <button
             type="button"
             onClick={handleDownloadCSV}
-            className="flex flex-col items-center justify-center gap-1 rounded-xl border border-zinc-200 bg-zinc-50 p-4 text-center hover:bg-zinc-100 transition-all cursor-pointer shadow-2xs"
+            className="flex flex-col items-center justify-center gap-1 rounded-xl border border-slate-200 bg-slate-50 p-4 text-center hover:bg-slate-100 transition-all cursor-pointer shadow-2xs"
           >
-            <Download className="h-6 w-6 text-zinc-700" />
-            <span className="font-bold text-sm text-zinc-900 mt-1">
+            <Download className="h-6 w-6 text-slate-700" />
+            <span className="font-bold text-sm text-slate-900 mt-1">
               ดาวน์โหลดไฟล์ CSV (Excel)
             </span>
-            <span className="text-2xs text-zinc-500">
+            <span className="text-2xs text-slate-500">
               บันทึกไฟล์ .csv เก็บไว้ในคอมพิวเตอร์ของคุณทันที
             </span>
           </button>
@@ -229,22 +229,22 @@ function doGet(e) {
         )}
 
         {/* Easy Option: Google Apps Script Web App */}
-        <div className="mt-5 rounded-xl border border-zinc-200 bg-zinc-50/60 p-4">
+        <div className="mt-5 rounded-xl border border-slate-200 bg-slate-50/60 p-4">
           <div className="flex items-center justify-between">
-            <span className="font-bold text-zinc-900 text-sm">
+            <span className="font-bold text-slate-900 text-sm">
               วิธีเชื่อมต่อ Google Sheet ที่ง่ายที่สุด (ไม่ต้องใช้ Google Cloud)
             </span>
             <button
               type="button"
               onClick={copyScript}
-              className="inline-flex items-center gap-1 rounded-lg bg-zinc-800 px-2.5 py-1 text-2xs font-medium text-white hover:bg-zinc-700"
+              className="inline-flex items-center gap-1 rounded-lg bg-slate-800 px-2.5 py-1 text-2xs font-medium text-white hover:bg-slate-700 cursor-pointer"
             >
               {copiedCode ? <Check className="h-3.5 w-3.5 text-emerald-400" /> : <Copy className="h-3.5 w-3.5" />}
               <span>{copiedCode ? 'คัดลอกโค้ดแล้ว!' : 'คัดลอกโค้ดสคริปต์'}</span>
             </button>
           </div>
 
-          <ol className="mt-2.5 list-decimal list-inside space-y-1.5 text-zinc-600 text-xs">
+          <ol className="mt-2.5 list-decimal list-inside space-y-1.5 text-slate-600 text-xs">
             <li>
               เปิด Google Sheet ของคุณ ไปที่เมนู <strong>ส่วนขยาย (Extensions) &gt; Apps Script</strong>
             </li>
@@ -255,7 +255,7 @@ function doGet(e) {
             <li>เลือกประเภทเป็น <strong>เว็บแอป (Web app)</strong> และตรง <em>&quot;ใครมีสิทธิ์เข้าถึง (Who has access)&quot;</em> ให้เลือกเป็น <strong>&quot;ทุกคน (Anyone)&quot;</strong></li>
             <li>กด <strong>ทำให้ใช้งานได้</strong> แล้วคัดลอก <strong>URL เว็บแอป</strong> ที่ได้ (ขึ้นต้นด้วย <code>https://script.google.com/macros/s/...</code>)</li>
             <li>นำ URL นั้นมาใส่ในไฟล์ <code>.env.local</code>:
-              <div className="mt-1 rounded bg-zinc-900 p-2 font-mono text-2xs text-zinc-200 overflow-x-auto">
+              <div className="mt-1 rounded bg-slate-900 p-2 font-mono text-2xs text-slate-200 overflow-x-auto">
                 GOOGLE_SHEET_WEBAPP_URL=&quot;https://script.google.com/macros/s/AKfycb.../exec&quot;
               </div>
             </li>
@@ -263,11 +263,11 @@ function doGet(e) {
         </div>
 
         {/* Footer */}
-        <div className="mt-6 flex justify-end border-t border-zinc-100 pt-3">
+        <div className="mt-6 flex justify-end border-t border-slate-100 pt-3">
           <button
             type="button"
             onClick={onClose}
-            className="rounded-lg bg-zinc-900 px-4 py-2 text-xs font-semibold text-white hover:bg-zinc-800"
+            className="rounded-lg bg-slate-900 px-4 py-2 text-xs font-semibold text-white hover:bg-slate-800 cursor-pointer"
           >
             ปิดหน้าต่าง
           </button>

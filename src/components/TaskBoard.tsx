@@ -27,38 +27,38 @@ const COLUMNS: ColumnConfig[] = [
   {
     id: 'pending',
     title: 'รอดำเนินการ',
-    countBadge: 'bg-amber-100/80 text-amber-800 ring-1 ring-amber-600/20',
-    headerBorder: 'border-t-amber-400',
-    columnBg: 'bg-slate-50/60',
+    countBadge: 'bg-amber-50 text-amber-800 border border-amber-200',
+    headerBorder: 'border-t-amber-500',
+    columnBg: 'bg-slate-100/70',
     icon: Clock,
-    iconColor: 'text-amber-500',
+    iconColor: 'text-amber-600',
   },
   {
     id: 'in_progress',
     title: 'กำลังดำเนินการ',
-    countBadge: 'bg-blue-100/80 text-blue-800 ring-1 ring-blue-600/20',
-    headerBorder: 'border-t-blue-500',
-    columnBg: 'bg-slate-50/60',
+    countBadge: 'bg-blue-50 text-blue-800 border border-blue-200',
+    headerBorder: 'border-t-blue-600',
+    columnBg: 'bg-slate-100/70',
     icon: PlayCircle,
-    iconColor: 'text-blue-500',
+    iconColor: 'text-blue-600',
   },
   {
     id: 'review',
     title: 'รอหัวหน้าตรวจ',
-    countBadge: 'bg-purple-100/80 text-purple-800 ring-1 ring-purple-600/20',
-    headerBorder: 'border-t-purple-500',
-    columnBg: 'bg-purple-50/30',
+    countBadge: 'bg-indigo-50 text-indigo-800 border border-indigo-200',
+    headerBorder: 'border-t-indigo-600',
+    columnBg: 'bg-slate-100/70',
     icon: AlertCircle,
-    iconColor: 'text-purple-500',
+    iconColor: 'text-indigo-600',
   },
   {
     id: 'completed',
     title: 'เสร็จสมบูรณ์',
-    countBadge: 'bg-emerald-100/80 text-emerald-800 ring-1 ring-emerald-600/20',
-    headerBorder: 'border-t-emerald-500',
-    columnBg: 'bg-slate-50/60',
+    countBadge: 'bg-emerald-50 text-emerald-800 border border-emerald-200',
+    headerBorder: 'border-t-emerald-600',
+    columnBg: 'bg-slate-100/70',
     icon: CheckCircle2,
-    iconColor: 'text-emerald-500',
+    iconColor: 'text-emerald-600',
   },
 ];
 
@@ -78,28 +78,28 @@ export function TaskBoard({
         return (
           <div
             key={column.id}
-            className={`flex flex-col rounded-2xl border border-slate-200/80 ${column.columnBg} p-3.5 shadow-xs border-t-4 ${column.headerBorder} transition-all`}
+            className={`flex flex-col rounded-xl border border-slate-200 bg-slate-100/60 p-3 shadow-2xs border-t-[3px] ${column.headerBorder}`}
           >
             {/* Column Header */}
-            <div className="flex items-center justify-between px-1.5 py-1 mb-2">
+            <div className="flex items-center justify-between px-1 py-1 mb-2.5">
               <div className="flex items-center gap-2">
-                <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-white shadow-2xs">
-                  <Icon className={`h-4 w-4 ${column.iconColor}`} />
+                <div className="flex h-6 w-6 items-center justify-center rounded-md bg-white border border-slate-200 shadow-2xs">
+                  <Icon className={`h-3.5 w-3.5 ${column.iconColor}`} />
                 </div>
-                <h2 className="text-sm font-bold text-slate-800">{column.title}</h2>
+                <h2 className="text-xs font-bold text-slate-800">{column.title}</h2>
               </div>
               <span
-                className={`rounded-full px-2.5 py-0.5 text-xs font-bold ${column.countBadge}`}
+                className={`rounded-full px-2 py-0.5 text-2xs font-bold ${column.countBadge}`}
               >
                 {columnTasks.length}
               </span>
             </div>
 
             {/* Tasks List in Column */}
-            <div className="flex flex-1 flex-col gap-3 min-h-[300px]">
+            <div className="flex flex-1 flex-col gap-2.5 min-h-[300px]">
               {columnTasks.length === 0 ? (
-                <div className="flex flex-1 flex-col items-center justify-center rounded-xl border border-dashed border-slate-200 bg-white/60 p-6 text-center">
-                  <p className="text-xs font-medium text-slate-400">ไม่มีงานในสถานะนี้</p>
+                <div className="flex flex-1 flex-col items-center justify-center rounded-lg border border-dashed border-slate-200 bg-white/70 p-6 text-center">
+                  <p className="text-xs font-medium text-slate-500">ไม่มีงานในสถานะนี้</p>
                 </div>
               ) : (
                 columnTasks.map((task) => (

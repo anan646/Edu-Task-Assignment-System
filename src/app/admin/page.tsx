@@ -20,6 +20,7 @@ import {
   RefreshCw,
   Loader2,
   FileSpreadsheet,
+  BarChart3,
 } from 'lucide-react';
 
 export default function AdminDashboard() {
@@ -177,10 +178,12 @@ export default function AdminDashboard() {
 
         {/* 4 High-level Executive KPI Cards */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-          <div className="rounded-3xl border border-slate-200/90 bg-white p-5 shadow-xs">
+          <div className="rounded-2xl border border-slate-200/90 bg-white p-5 shadow-xs">
             <div className="flex items-center justify-between text-xs font-semibold text-slate-500">
               <span>งานทั้งหมดในองค์กร</span>
-              <span className="p-2 rounded-xl bg-blue-50 text-blue-600">📊</span>
+              <div className="p-2 rounded-xl bg-blue-50 text-blue-700 border border-blue-100">
+                <BarChart3 className="h-4 w-4" />
+              </div>
             </div>
             <div className="mt-3">
               <span className="text-3xl font-extrabold text-slate-900">{total}</span>
@@ -188,10 +191,12 @@ export default function AdminDashboard() {
             </div>
           </div>
 
-          <div className="rounded-3xl border border-slate-200/90 bg-white p-5 shadow-xs">
+          <div className="rounded-2xl border border-slate-200/90 bg-white p-5 shadow-xs">
             <div className="flex items-center justify-between text-xs font-semibold text-slate-500">
               <span>อัตราความสำเร็จ (KPI)</span>
-              <span className="p-2 rounded-xl bg-emerald-50 text-emerald-600">📈</span>
+              <div className="p-2 rounded-xl bg-emerald-50 text-emerald-700 border border-emerald-100">
+                <TrendingUp className="h-4 w-4" />
+              </div>
             </div>
             <div className="mt-3">
               <span className="text-3xl font-extrabold text-emerald-600">{completionRate}%</span>
@@ -199,21 +204,25 @@ export default function AdminDashboard() {
             </div>
           </div>
 
-          <div className="rounded-3xl border border-slate-200/90 bg-white p-5 shadow-xs">
+          <div className="rounded-2xl border border-slate-200/90 bg-white p-5 shadow-xs">
             <div className="flex items-center justify-between text-xs font-semibold text-slate-500">
               <span>งานคั่งค้าง / รอตรวจ</span>
-              <span className="p-2 rounded-xl bg-purple-50 text-purple-600">⏳</span>
+              <div className="p-2 rounded-xl bg-indigo-50 text-indigo-700 border border-indigo-100">
+                <Clock className="h-4 w-4" />
+              </div>
             </div>
             <div className="mt-3">
-              <span className="text-3xl font-extrabold text-purple-700">{review + inProgress}</span>
-              <p className="text-2xs text-purple-600 mt-1">รอตรวจ {review} • กำลังทำ {inProgress}</p>
+              <span className="text-3xl font-extrabold text-indigo-700">{review + inProgress}</span>
+              <p className="text-2xs text-indigo-600 mt-1">รอตรวจ {review} • กำลังทำ {inProgress}</p>
             </div>
           </div>
 
-          <div className="rounded-3xl border border-slate-200/90 bg-white p-5 shadow-xs">
+          <div className="rounded-2xl border border-slate-200/90 bg-white p-5 shadow-xs">
             <div className="flex items-center justify-between text-xs font-semibold text-slate-500">
               <span>งานเกินกำหนดส่ง (Overdue)</span>
-              <span className="p-2 rounded-xl bg-rose-50 text-rose-600">🚨</span>
+              <div className="p-2 rounded-xl bg-rose-50 text-rose-700 border border-rose-100">
+                <AlertTriangle className="h-4 w-4" />
+              </div>
             </div>
             <div className="mt-3">
               <span className="text-3xl font-extrabold text-rose-600">{overdue}</span>
@@ -225,14 +234,14 @@ export default function AdminDashboard() {
         {/* 2 Big Panels: Department Progress & Google Sheet Infrastructure */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Department Breakdown (2 cols) */}
-          <div className="lg:col-span-2 rounded-3xl border border-slate-200/90 bg-white p-6 shadow-xs">
+          <div className="lg:col-span-2 rounded-2xl border border-slate-200/90 bg-white p-6 shadow-xs">
             <div className="flex items-center justify-between mb-5">
               <div className="flex items-center gap-2.5">
-                <div className="h-8 w-8 rounded-xl bg-blue-50 text-blue-700 flex items-center justify-center font-bold">
-                  🏢
+                <div className="h-8 w-8 rounded-xl bg-blue-50 text-blue-700 border border-blue-100 flex items-center justify-center">
+                  <Building className="h-4 w-4" />
                 </div>
                 <div>
-                  <h2 className="font-extrabold text-sm text-slate-900">
+                  <h2 className="font-bold text-sm text-slate-900">
                     ความคืบหน้าและภาระงานแยกตามฝ่าย (Department Performance)
                   </h2>
                   <p className="text-2xs text-slate-400">สัดส่วนงานที่เสร็จสิ้นเทียบกับภาระงานทั้งหมด</p>
@@ -262,21 +271,21 @@ export default function AdminDashboard() {
           </div>
 
           {/* Google Sheets Infrastructure Status (1 col) */}
-          <div className="rounded-3xl border border-slate-200/90 bg-white p-6 shadow-xs flex flex-col justify-between">
+          <div className="rounded-2xl border border-slate-200/90 bg-white p-6 shadow-xs flex flex-col justify-between">
             <div>
               <div className="flex items-center gap-2.5 mb-4">
                 <div className="h-8 w-8 rounded-xl bg-emerald-50 text-emerald-700 flex items-center justify-center">
                   <Sheet className="h-5 w-5" />
                 </div>
                 <div>
-                  <h2 className="font-extrabold text-sm text-slate-900">
+                  <h2 className="font-bold text-sm text-slate-900">
                     ฐานข้อมูล Google Sheets
                   </h2>
                   <p className="text-2xs text-slate-400">สถานะการเชื่อมต่อสเปรดชีต</p>
                 </div>
               </div>
 
-              <div className="rounded-2xl bg-emerald-50/70 border border-emerald-200/80 p-4 space-y-2.5 text-xs text-emerald-900">
+              <div className="rounded-xl bg-emerald-50/70 border border-emerald-200/80 p-4 space-y-2.5 text-xs text-emerald-900">
                 <div className="flex items-center gap-2">
                   <span className="relative flex h-2.5 w-2.5">
                     <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
@@ -320,15 +329,16 @@ export default function AdminDashboard() {
         </div>
 
         {/* All Tasks Table Overview for Admin */}
-        <div className="rounded-3xl border border-slate-200/90 bg-white p-6 shadow-xs">
+        <div className="rounded-2xl border border-slate-200/90 bg-white p-6 shadow-xs">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
-            <h2 className="font-extrabold text-sm text-slate-900 flex items-center gap-2">
-              <span>📋 รายการงานทั้งหมดในระบบ ({tasks.length} งาน)</span>
+            <h2 className="font-bold text-sm text-slate-900 flex items-center gap-2">
+              <FileSpreadsheet className="h-4 w-4 text-slate-600" />
+              <span>รายการงานทั้งหมดในระบบ ({tasks.length} งาน)</span>
             </h2>
             <div className="flex items-center gap-2">
               <Link
                 href="/manager"
-                className="text-xs font-bold text-blue-600 hover:underline"
+                className="text-xs font-semibold text-blue-700 hover:text-blue-800 hover:underline"
               >
                 ไปที่หน้าสั่งงานหัวหน้า →
               </Link>
@@ -342,12 +352,12 @@ export default function AdminDashboard() {
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="ค้นหาชื่องาน, ผู้รับผิดชอบ หรือรหัส..."
-              className="rounded-xl border border-slate-200 bg-slate-50/70 px-3.5 py-2 text-xs text-slate-800 placeholder-slate-400 focus:border-purple-500 focus:bg-white focus:outline-hidden focus:ring-2 focus:ring-purple-500/20"
+              className="rounded-lg border border-slate-200 bg-slate-50/70 px-3.5 py-2 text-xs text-slate-800 placeholder-slate-400 focus:border-blue-600 focus:bg-white focus:outline-hidden focus:ring-2 focus:ring-blue-500/20"
             />
             <select
               value={filterDept}
               onChange={(e) => setFilterDept(e.target.value)}
-              className="rounded-xl border border-slate-200 bg-slate-50/70 px-3 py-2 text-xs font-semibold text-slate-800 focus:border-purple-500 focus:bg-white focus:outline-hidden cursor-pointer"
+              className="rounded-lg border border-slate-200 bg-slate-50/70 px-3 py-2 text-xs font-semibold text-slate-800 focus:border-blue-600 focus:bg-white focus:outline-hidden cursor-pointer"
             >
               <option value="all">ทุกฝ่ายงาน</option>
               {departments.map((d) => (
@@ -359,13 +369,13 @@ export default function AdminDashboard() {
             <select
               value={filterStatus}
               onChange={(e) => setFilterStatus(e.target.value)}
-              className="rounded-xl border border-slate-200 bg-slate-50/70 px-3 py-2 text-xs font-semibold text-slate-800 focus:border-purple-500 focus:bg-white focus:outline-hidden cursor-pointer"
+              className="rounded-lg border border-slate-200 bg-slate-50/70 px-3 py-2 text-xs font-semibold text-slate-800 focus:border-blue-600 focus:bg-white focus:outline-hidden cursor-pointer"
             >
               <option value="all">ทุกสถานะ</option>
-              <option value="pending">⏳ รอดำเนินการ</option>
-              <option value="in_progress">🔵 กำลังดำเนินการ</option>
-              <option value="review">🟣 รอหัวหน้าตรวจ</option>
-              <option value="completed">🟢 เสร็จสมบูรณ์</option>
+              <option value="pending">รอดำเนินการ (Pending)</option>
+              <option value="in_progress">กำลังดำเนินการ (In Progress)</option>
+              <option value="review">รอหัวหน้าตรวจ (Review)</option>
+              <option value="completed">เสร็จสมบูรณ์ (Completed)</option>
             </select>
           </div>
 
@@ -398,12 +408,12 @@ export default function AdminDashboard() {
                   .map((task) => {
                     const statusBadge =
                       task.status === 'completed'
-                        ? 'bg-emerald-50 text-emerald-700 ring-1 ring-emerald-500/20'
+                        ? 'bg-emerald-50 text-emerald-700 border border-emerald-200'
                         : task.status === 'review'
-                        ? 'bg-purple-50 text-purple-700 ring-1 ring-purple-500/20'
+                        ? 'bg-indigo-50 text-indigo-700 border border-indigo-200'
                         : task.status === 'in_progress'
-                        ? 'bg-blue-50 text-blue-700 ring-1 ring-blue-500/20'
-                        : 'bg-amber-50 text-amber-800 ring-1 ring-amber-500/20';
+                        ? 'bg-blue-50 text-blue-700 border border-blue-200'
+                        : 'bg-amber-50 text-amber-800 border border-amber-200';
 
                     const statusText =
                       task.status === 'completed'
@@ -422,7 +432,7 @@ export default function AdminDashboard() {
                         <td className="px-4 py-3 font-medium text-slate-800">{task.assignedTo}</td>
                         <td className="px-4 py-3">{task.dueDate}</td>
                         <td className="px-4 py-3">
-                          <span className={`px-2.5 py-0.5 rounded-full text-2xs font-extrabold ${statusBadge}`}>
+                          <span className={`px-2.5 py-0.5 rounded-md text-2xs font-bold ${statusBadge}`}>
                             {statusText}
                           </span>
                         </td>

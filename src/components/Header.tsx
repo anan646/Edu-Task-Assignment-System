@@ -64,7 +64,7 @@ export function Header({
           <button
             type="button"
             onClick={onOpenBackupModal}
-            className="inline-flex items-center gap-1.5 rounded-xl border border-emerald-200/90 bg-emerald-50/90 px-3 py-2 text-xs font-semibold text-emerald-800 shadow-xs hover:bg-emerald-100/90 hover:shadow-sm transition-all cursor-pointer active:scale-95"
+            className="inline-flex items-center gap-1.5 rounded-lg border border-emerald-200 bg-emerald-50 px-3 py-2 text-xs font-semibold text-emerald-800 shadow-xs hover:bg-emerald-100 transition-colors cursor-pointer"
             title="สำรองข้อมูลลง Google Sheet"
           >
             <CloudUpload className="h-4 w-4 text-emerald-600" />
@@ -76,7 +76,7 @@ export function Header({
           <button
             type="button"
             onClick={onOpenGuideModal}
-            className="inline-flex items-center gap-1.5 rounded-xl border border-slate-200 bg-white px-3 py-2 text-xs font-medium text-slate-700 shadow-xs hover:bg-slate-50 hover:text-slate-900 transition-all cursor-pointer"
+            className="inline-flex items-center gap-1.5 rounded-lg border border-slate-200 bg-white px-3 py-2 text-xs font-medium text-slate-700 shadow-xs hover:bg-slate-50 hover:text-slate-900 transition-colors cursor-pointer"
           >
             <HelpCircle className="h-4 w-4 text-slate-500" />
             <span className="hidden md:inline">คู่มือ</span>

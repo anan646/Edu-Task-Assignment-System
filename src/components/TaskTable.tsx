@@ -13,10 +13,10 @@ interface TaskTableProps {
 }
 
 const STATUS_CONFIG: Record<TaskStatus, { label: string; badge: string; dot: string }> = {
-  pending: { label: 'รอดำเนินการ', badge: 'bg-amber-50 text-amber-800 ring-amber-600/25', dot: 'bg-amber-500' },
-  in_progress: { label: 'กำลังดำเนินการ', badge: 'bg-blue-50 text-blue-700 ring-blue-600/25', dot: 'bg-blue-500' },
-  review: { label: 'รอตรวจ', badge: 'bg-purple-50 text-purple-700 ring-purple-600/25', dot: 'bg-purple-500' },
-  completed: { label: 'เสร็จสมบูรณ์', badge: 'bg-emerald-50 text-emerald-700 ring-emerald-600/25', dot: 'bg-emerald-500' },
+  pending: { label: 'รอดำเนินการ', badge: 'bg-amber-50 text-amber-800 border border-amber-200', dot: 'bg-amber-500' },
+  in_progress: { label: 'กำลังดำเนินการ', badge: 'bg-blue-50 text-blue-800 border border-blue-200', dot: 'bg-blue-600' },
+  review: { label: 'รอตรวจ', badge: 'bg-indigo-50 text-indigo-800 border border-indigo-200', dot: 'bg-indigo-600' },
+  completed: { label: 'เสร็จสมบูรณ์', badge: 'bg-emerald-50 text-emerald-800 border border-emerald-200', dot: 'bg-emerald-600' },
 };
 
 const PRIORITY_LABELS: Record<Priority, { label: string; color: string; dot: string }> = {
@@ -129,7 +129,7 @@ export function TaskTable({
                     {/* Status */}
                     <td className="px-4 py-3.5 whitespace-nowrap">
                       <span
-                        className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-2xs font-semibold ring-1 ring-inset ${statusInfo.badge}`}
+                        className={`inline-flex items-center gap-1.5 rounded-md px-2 py-0.5 text-2xs font-semibold ${statusInfo.badge}`}
                       >
                         <span className={`h-1.5 w-1.5 rounded-full ${statusInfo.dot}`}></span>
                         {statusInfo.label}
@@ -146,14 +146,14 @@ export function TaskTable({
                           <button
                             type="button"
                             onClick={() => onUpdateStatus(task.id, 'in_progress')}
-                            className="rounded-lg border border-amber-200 bg-amber-50 px-2.5 py-1 text-2xs font-bold text-amber-800 hover:bg-amber-100 transition-colors cursor-pointer"
+                            className="rounded-md border border-amber-300 bg-amber-50 px-2.5 py-1 text-2xs font-semibold text-amber-800 hover:bg-amber-100 transition-colors cursor-pointer"
                           >
                             ตีกลับ
                           </button>
                           <button
                             type="button"
                             onClick={() => onUpdateStatus(task.id, 'completed')}
-                            className="rounded-lg bg-emerald-600 px-2.5 py-1 text-2xs font-bold text-white hover:bg-emerald-500 shadow-2xs transition-colors cursor-pointer"
+                            className="rounded-md bg-emerald-600 px-2.5 py-1 text-2xs font-semibold text-white hover:bg-emerald-700 shadow-2xs transition-colors cursor-pointer"
                           >
                             อนุมัติ
                           </button>
@@ -164,7 +164,7 @@ export function TaskTable({
                         <button
                           type="button"
                           onClick={() => onUpdateStatus(task.id, 'in_progress')}
-                          className="rounded-lg bg-blue-50 px-2.5 py-1 text-2xs font-bold text-blue-700 hover:bg-blue-100 transition-colors cursor-pointer"
+                          className="rounded-md border border-blue-200 bg-blue-50 px-2.5 py-1 text-2xs font-semibold text-blue-700 hover:bg-blue-100 transition-colors cursor-pointer"
                         >
                           เริ่มทำ
                         </button>
@@ -174,7 +174,7 @@ export function TaskTable({
                         <button
                           type="button"
                           onClick={() => onOpenDetail(task)}
-                          className="rounded-lg bg-purple-50 px-2.5 py-1 text-2xs font-bold text-purple-700 hover:bg-purple-100 transition-colors cursor-pointer"
+                          className="rounded-md border border-indigo-200 bg-indigo-50 px-2.5 py-1 text-2xs font-semibold text-indigo-700 hover:bg-indigo-100 transition-colors cursor-pointer"
                         >
                           ส่งตรวจ
                         </button>
@@ -185,7 +185,7 @@ export function TaskTable({
                         <button
                           type="button"
                           onClick={() => onOpenDetail(task)}
-                          className="text-2xs font-bold text-slate-500 hover:text-blue-600 transition-colors"
+                          className="text-2xs font-semibold text-slate-500 hover:text-blue-700 transition-colors"
                         >
                           ดูรายละเอียด →
                         </button>

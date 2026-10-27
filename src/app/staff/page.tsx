@@ -192,14 +192,14 @@ export default function StaffPortal() {
             <select
               value={selectedAssignee}
               onChange={(e) => setSelectedAssignee(e.target.value)}
-              className="w-full sm:w-auto rounded-xl border border-slate-200 bg-slate-50 px-3.5 py-2 text-xs font-semibold text-slate-800 focus:border-emerald-500 focus:bg-white focus:ring-2 focus:ring-emerald-500/20 focus:outline-hidden transition-all cursor-pointer shadow-2xs"
+              className="w-full sm:w-auto rounded-lg border border-slate-200 bg-slate-50 px-3.5 py-2 text-xs font-semibold text-slate-800 focus:border-emerald-600 focus:bg-white focus:ring-2 focus:ring-emerald-500/20 focus:outline-hidden transition-all cursor-pointer shadow-xs"
             >
-              <option value="all">👥 ดูงานของทุกคนในองค์กร ({tasks.length} งาน)</option>
+              <option value="all">ทุกคนในองค์กร ({tasks.length} งาน)</option>
               {distinctAssignees.map((name) => {
                 const count = tasks.filter((t) => t.assignedTo?.toLowerCase().includes(name.toLowerCase())).length;
                 return (
                   <option key={name} value={name}>
-                    👤 {name} ({count} งาน)
+                    {name} ({count} งาน)
                   </option>
                 );
               })}

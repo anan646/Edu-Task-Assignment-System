@@ -13,18 +13,18 @@ interface TaskCardProps {
 }
 
 const PRIORITY_CONFIG: Record<Priority, { label: string; badge: string; dot: string }> = {
-  urgent: { label: 'ด่วนที่สุด', badge: 'bg-rose-50 text-rose-700 ring-rose-600/25', dot: 'bg-rose-500' },
-  high: { label: 'ด่วน', badge: 'bg-amber-50 text-amber-800 ring-amber-600/25', dot: 'bg-amber-500' },
-  normal: { label: 'ปกติ', badge: 'bg-blue-50 text-blue-700 ring-blue-600/25', dot: 'bg-blue-500' },
-  low: { label: 'ทั่วไป', badge: 'bg-slate-100 text-slate-600 ring-slate-500/25', dot: 'bg-slate-400' },
+  urgent: { label: 'ด่วนที่สุด', badge: 'bg-rose-50 text-rose-800 border border-rose-200', dot: 'bg-rose-500' },
+  high: { label: 'ด่วน', badge: 'bg-amber-50 text-amber-800 border border-amber-200', dot: 'bg-amber-500' },
+  normal: { label: 'ปกติ', badge: 'bg-blue-50 text-blue-800 border border-blue-200', dot: 'bg-blue-500' },
+  low: { label: 'ทั่วไป', badge: 'bg-slate-100 text-slate-700 border border-slate-200', dot: 'bg-slate-400' },
 };
 
 const DEPT_CONFIG: Record<string, { name: string; badge: string; dot: string }> = {
-  it: { name: 'ไอทีและระบบ', badge: 'bg-blue-50 text-blue-700 ring-blue-500/20', dot: 'bg-blue-500' },
-  mkt: { name: 'การตลาด', badge: 'bg-pink-50 text-pink-700 ring-pink-500/20', dot: 'bg-pink-500' },
-  acc: { name: 'การเงิน/บัญชี', badge: 'bg-emerald-50 text-emerald-700 ring-emerald-500/20', dot: 'bg-emerald-500' },
-  hr: { name: 'ฝ่ายบุคคล', badge: 'bg-purple-50 text-purple-700 ring-purple-500/20', dot: 'bg-purple-500' },
-  ops: { name: 'ปฏิบัติการ/จัดซื้อ', badge: 'bg-amber-50 text-amber-800 ring-amber-500/20', dot: 'bg-amber-500' },
+  it: { name: 'ไอทีและระบบ', badge: 'bg-blue-50 text-blue-800 border border-blue-200', dot: 'bg-blue-600' },
+  mkt: { name: 'การตลาด', badge: 'bg-rose-50 text-rose-800 border border-rose-200', dot: 'bg-rose-500' },
+  acc: { name: 'การเงิน/บัญชี', badge: 'bg-emerald-50 text-emerald-800 border border-emerald-200', dot: 'bg-emerald-600' },
+  hr: { name: 'ฝ่ายบุคคล', badge: 'bg-indigo-50 text-indigo-800 border border-indigo-200', dot: 'bg-indigo-600' },
+  ops: { name: 'ปฏิบัติการ/จัดซื้อ', badge: 'bg-amber-50 text-amber-800 border border-amber-200', dot: 'bg-amber-600' },
 };
 
 export function TaskCard({
@@ -37,7 +37,7 @@ export function TaskCard({
   const dept = departments.find((d) => d.id === task.departmentId);
   const deptInfo = DEPT_CONFIG[task.departmentId] || {
     name: dept?.name ? dept.name.split(' (')[0] : task.departmentId,
-    badge: 'bg-slate-100 text-slate-700 ring-slate-400/20',
+    badge: 'bg-slate-100 text-slate-700 border border-slate-200',
     dot: 'bg-slate-500',
   };
   const priorityInfo = PRIORITY_CONFIG[task.priority] || PRIORITY_CONFIG.normal;
@@ -52,19 +52,19 @@ export function TaskCard({
   const isDueToday = Boolean(today && task.dueDate === today);
 
   return (
-    <div className="group relative flex flex-col justify-between rounded-2xl border border-slate-200/90 bg-white p-4 shadow-xs hover:border-slate-300 hover:shadow-md transition-all duration-200">
+    <div className="group relative flex flex-col justify-between rounded-xl border border-slate-200 bg-white p-3.5 shadow-2xs hover:border-slate-300 hover:shadow-xs transition-all duration-150">
       {/* Top Bar: Dept Badge + Priority + Task ID */}
       <div>
         <div className="flex items-center justify-between gap-2">
           <div className="flex flex-wrap items-center gap-1.5">
             <span
-              className={`inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-2xs font-semibold ring-1 ring-inset ${deptInfo.badge}`}
+              className={`inline-flex items-center gap-1 rounded-md px-2 py-0.5 text-2xs font-semibold ${deptInfo.badge}`}
             >
               <span className={`h-1.5 w-1.5 rounded-full ${deptInfo.dot}`}></span>
               {deptInfo.name}
             </span>
             <span
-              className={`inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-2xs font-semibold ring-1 ring-inset ${priorityInfo.badge}`}
+              className={`inline-flex items-center gap-1 rounded-md px-2 py-0.5 text-2xs font-semibold ${priorityInfo.badge}`}
             >
               <span className={`h-1.5 w-1.5 rounded-full ${priorityInfo.dot}`}></span>
               {priorityInfo.label}
@@ -141,30 +141,32 @@ export function TaskCard({
                 <button
                   type="button"
                   onClick={() => onUpdateStatus(task.id, 'in_progress')}
-                  className="inline-flex w-full items-center justify-center gap-1.5 rounded-xl bg-blue-50 px-3 py-2 text-xs font-bold text-blue-700 hover:bg-blue-100 active:scale-95 transition-all cursor-pointer"
+                  className="inline-flex w-full items-center justify-center gap-1.5 rounded-lg border border-blue-200 bg-blue-50 px-3 py-1.5 text-xs font-semibold text-blue-700 hover:bg-blue-100 active:scale-95 transition-all cursor-pointer"
                 >
                   <span>เริ่มทำงาน</span>
-                  <ArrowRight className="h-3.5 w-3.5 stroke-[2.5]" />
+                  <ArrowRight className="h-3.5 w-3.5" />
                 </button>
               )}
               {task.status === 'in_progress' && (
                 <button
                   type="button"
                   onClick={() => onOpenDetail(task)}
-                  className="inline-flex w-full items-center justify-center gap-1.5 rounded-xl bg-purple-50 px-3 py-2 text-xs font-bold text-purple-700 hover:bg-purple-100 active:scale-95 transition-all cursor-pointer"
+                  className="inline-flex w-full items-center justify-center gap-1.5 rounded-lg border border-indigo-200 bg-indigo-50 px-3 py-1.5 text-xs font-semibold text-indigo-700 hover:bg-indigo-100 active:scale-95 transition-all cursor-pointer"
                 >
                   <span>ส่งตรวจงาน</span>
-                  <ArrowRight className="h-3.5 w-3.5 stroke-[2.5]" />
+                  <ArrowRight className="h-3.5 w-3.5" />
                 </button>
               )}
               {task.status === 'review' && (
-                <span className="w-full text-center text-2xs font-semibold text-purple-700 bg-purple-50/70 py-1.5 rounded-xl border border-purple-200/60">
-                  ⏳ อยู่ระหว่างรอหัวหน้าตรวจ
+                <span className="inline-flex w-full items-center justify-center gap-1.5 text-2xs font-semibold text-indigo-800 bg-indigo-50 py-1.5 rounded-lg border border-indigo-200">
+                  <Clock className="h-3.5 w-3.5 text-indigo-600" />
+                  <span>อยู่ระหว่างรอหัวหน้าตรวจ</span>
                 </span>
               )}
               {task.status === 'completed' && (
-                <span className="inline-flex w-full items-center justify-center gap-1 text-2xs font-semibold text-emerald-700 bg-emerald-50/70 py-1.5 rounded-xl border border-emerald-200/60">
-                  <CheckCircle2 className="h-3.5 w-3.5 text-emerald-600" /> เสร็จสมบูรณ์แล้ว
+                <span className="inline-flex w-full items-center justify-center gap-1.5 text-2xs font-semibold text-emerald-800 bg-emerald-50 py-1.5 rounded-lg border border-emerald-200">
+                  <CheckCircle2 className="h-3.5 w-3.5 text-emerald-600" />
+                  <span>เสร็จสมบูรณ์แล้ว</span>
                 </span>
               )}
             </>
@@ -178,7 +180,7 @@ export function TaskCard({
                   <button
                     type="button"
                     onClick={() => onUpdateStatus(task.id, 'in_progress')}
-                    className="inline-flex flex-1 items-center justify-center gap-1 rounded-xl border border-amber-200 bg-amber-50 px-2.5 py-1.5 text-xs font-bold text-amber-800 hover:bg-amber-100 active:scale-95 transition-all cursor-pointer"
+                    className="inline-flex flex-1 items-center justify-center gap-1 rounded-lg border border-amber-300 bg-amber-50 px-2.5 py-1.5 text-xs font-semibold text-amber-800 hover:bg-amber-100 active:scale-95 transition-all cursor-pointer"
                     title="ส่งกลับให้พนักงานแก้ไข"
                   >
                     <RotateCcw className="h-3.5 w-3.5" />
@@ -199,7 +201,7 @@ export function TaskCard({
                 <button
                   type="button"
                   onClick={() => onOpenDetail(task)}
-                  className="inline-flex w-full items-center justify-center gap-1 rounded-xl border border-slate-200 bg-slate-50/80 px-2.5 py-1.5 text-xs font-medium text-slate-600 hover:bg-slate-100 hover:text-slate-900 transition-all cursor-pointer"
+                  className="inline-flex w-full items-center justify-center gap-1 rounded-lg border border-slate-200 bg-slate-50 px-2.5 py-1.5 text-xs font-medium text-slate-700 hover:bg-slate-100 transition-all cursor-pointer"
                 >
                   <span>ดูรายละเอียด / แก้ไข</span>
                 </button>
@@ -209,7 +211,7 @@ export function TaskCard({
                 <button
                   type="button"
                   onClick={() => onOpenDetail(task)}
-                  className="inline-flex w-full items-center justify-center gap-1 rounded-xl border border-blue-200/80 bg-blue-50/50 px-2.5 py-1.5 text-xs font-semibold text-blue-700 hover:bg-blue-100/80 transition-all cursor-pointer"
+                  className="inline-flex w-full items-center justify-center gap-1 rounded-lg border border-blue-200 bg-blue-50/60 px-2.5 py-1.5 text-xs font-semibold text-blue-700 hover:bg-blue-100 transition-all cursor-pointer"
                 >
                   <span>ติดตามความคืบหน้า</span>
                 </button>
@@ -219,7 +221,7 @@ export function TaskCard({
                 <button
                   type="button"
                   onClick={() => onOpenDetail(task)}
-                  className="inline-flex w-full items-center justify-center gap-1 text-2xs font-semibold text-emerald-700 hover:underline py-1"
+                  className="inline-flex w-full items-center justify-center gap-1 text-2xs font-semibold text-emerald-700 hover:text-emerald-800 hover:underline py-1"
                 >
                   <CheckCircle2 className="h-3.5 w-3.5 text-emerald-600" />
                   <span>ดูผลงานที่ส่งมอบ</span>
